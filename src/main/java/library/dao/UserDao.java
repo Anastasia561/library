@@ -1,5 +1,7 @@
 package library.dao;
 
+import library.entity.User;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
@@ -11,30 +13,27 @@ public class UserDao {
         this.sessionFactory = sessionFactory;
     }
 
-    public UserDao getById(Integer id) {
-        return sessionFactory.getCurrentSession().get(UserDao.class, id);
+    public void save(User entity) {
+        sessionFactory.getCurrentSession().save(entity);
     }
 
-    public List<UserDao> findAll() {
-        return sessionFactory.getCurrentSession()
-                .createQuery("from User", UserDao.class).list();
+    public User getById(Integer id) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(User.class, id);
     }
 
-    public UserDao save(UserDao entity) {
-        sessionFactory.getCurrentSession().saveOrUpdate(entity);
-        return entity;
+    public List<User> findAll() {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("FROM User", User.class).list();
     }
 
-    public UserDao update(UserDao entity) {
-        return sessionFactory.getCurrentSession().merge(entity);
+    public void update(User user) {
+        Session session = sessionFactory.getCurrentSession();
+        session.merge(user);
     }
 
-    public void delete(UserDao entity) {
-        sessionFactory.getCurrentSession().delete(entity);
-    }
-
-    public void deleteById(Integer id) {
-        UserDao entity = getById(id);
-        delete(entity);
+    public void delete(User user) {
+        Session session = sessionFactory.getCurrentSession();
+        session.remove(user);
     }
 }

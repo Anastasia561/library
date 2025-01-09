@@ -1,6 +1,7 @@
 package library.dao;
 
 import library.entity.Borrowing;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
@@ -12,30 +13,27 @@ public class BorrowingDao {
         this.sessionFactory = sessionFactory;
     }
 
+    public void save(Borrowing entity) {
+        sessionFactory.getCurrentSession().save(entity);
+    }
+
     public Borrowing getById(Integer id) {
-        return sessionFactory.getCurrentSession().get(Borrowing.class, id);
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(Borrowing.class, id);
     }
 
     public List<Borrowing> findAll() {
-        return sessionFactory.getCurrentSession()
-                .createQuery("from Borrowing", Borrowing.class).list();
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("FROM Borrowing", Borrowing.class).list();
     }
 
-    public Borrowing save(Borrowing entity) {
-        sessionFactory.getCurrentSession().saveOrUpdate(entity);
-        return entity;
+    public void update(Borrowing borrowing) {
+        Session session = sessionFactory.getCurrentSession();
+        session.merge(borrowing);
     }
 
-    public Borrowing update(Borrowing entity) {
-        return sessionFactory.getCurrentSession().merge(entity);
-    }
-
-    public void delete(Borrowing entity) {
-        sessionFactory.getCurrentSession().delete(entity);
-    }
-
-    public void deleteById(Integer id) {
-        Borrowing entity = getById(id);
-        delete(entity);
+    public void delete(Borrowing borrowing) {
+        Session session = sessionFactory.getCurrentSession();
+        session.remove(borrowing);
     }
 }

@@ -1,6 +1,7 @@
 package library.dao;
 
 import library.entity.Book;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
@@ -12,30 +13,27 @@ public class BookDao {
         this.sessionFactory = sessionFactory;
     }
 
+    public void save(Book entity) {
+        sessionFactory.getCurrentSession().save(entity);
+    }
+
     public Book getById(Integer id) {
-        return sessionFactory.getCurrentSession().get(Book.class, id);
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(Book.class, id);
     }
 
     public List<Book> findAll() {
-        return sessionFactory.getCurrentSession()
-                .createQuery("from Book", Book.class).list();
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("FROM Book", Book.class).list();
     }
 
-    public Book save(Book entity) {
-        sessionFactory.getCurrentSession().saveOrUpdate(entity);
-        return entity;
+    public void update(Book book) {
+        Session session = sessionFactory.getCurrentSession();
+        session.merge(book);
     }
 
-    public Book update(Book entity) {
-        return sessionFactory.getCurrentSession().merge(entity);
-    }
-
-    public void delete(Book entity) {
-        sessionFactory.getCurrentSession().delete(entity);
-    }
-
-    public void deleteById(Integer id) {
-        Book entity = getById(id);
-        delete(entity);
+    public void delete(Book book) {
+        Session session = sessionFactory.getCurrentSession();
+        session.remove(book);
     }
 }

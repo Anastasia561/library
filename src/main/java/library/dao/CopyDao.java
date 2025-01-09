@@ -1,6 +1,7 @@
 package library.dao;
 
 import library.entity.Copy;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
@@ -12,30 +13,27 @@ public class CopyDao {
         this.sessionFactory = sessionFactory;
     }
 
+    public void save(Copy entity) {
+        sessionFactory.getCurrentSession().save(entity);
+    }
+
     public Copy getById(Integer id) {
-        return sessionFactory.getCurrentSession().get(Copy.class, id);
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(Copy.class, id);
     }
 
     public List<Copy> findAll() {
-        return sessionFactory.getCurrentSession()
-                .createQuery("from Copy", Copy.class).list();
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("FROM Copy", Copy.class).list();
     }
 
-    public Copy save(Copy entity) {
-        sessionFactory.getCurrentSession().saveOrUpdate(entity);
-        return entity;
+    public void update(Copy copy) {
+        Session session = sessionFactory.getCurrentSession();
+        session.merge(copy);
     }
 
-    public Copy update(Copy entity) {
-        return sessionFactory.getCurrentSession().merge(entity);
-    }
-
-    public void delete(Copy entity) {
-        sessionFactory.getCurrentSession().delete(entity);
-    }
-
-    public void deleteById(Integer id) {
-        Copy entity = getById(id);
-        delete(entity);
+    public void delete(Copy copy) {
+        Session session = sessionFactory.getCurrentSession();
+        session.remove(copy);
     }
 }

@@ -1,6 +1,7 @@
 package library.dao;
 
 import library.entity.Publisher;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
@@ -12,30 +13,27 @@ public class PublisherDao {
         this.sessionFactory = sessionFactory;
     }
 
+    public void save(PublisherDao entity) {
+        sessionFactory.getCurrentSession().save(entity);
+    }
+
     public Publisher getById(Integer id) {
-        return sessionFactory.getCurrentSession().get(Publisher.class, id);
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(Publisher.class, id);
     }
 
     public List<Publisher> findAll() {
-        return sessionFactory.getCurrentSession()
-                .createQuery("from Publisher", Publisher.class).list();
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("FROM Publisher", Publisher.class).list();
     }
 
-    public Publisher save(Publisher entity) {
-        sessionFactory.getCurrentSession().saveOrUpdate(entity);
-        return entity;
+    public void update(Publisher publisher) {
+        Session session = sessionFactory.getCurrentSession();
+        session.merge(publisher);
     }
 
-    public Publisher update(Publisher entity) {
-        return sessionFactory.getCurrentSession().merge(entity);
-    }
-
-    public void delete(Publisher entity) {
-        sessionFactory.getCurrentSession().delete(entity);
-    }
-
-    public void deleteById(Integer id) {
-        Publisher entity = getById(id);
-        delete(entity);
+    public void delete(Publisher publisher) {
+        Session session = sessionFactory.getCurrentSession();
+        session.remove(publisher);
     }
 }
