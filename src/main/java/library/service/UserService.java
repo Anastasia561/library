@@ -12,6 +12,7 @@ import java.util.List;
 public class UserService {
     private final SessionFactory sessionFactory;
     private final UserDao userDao;
+    private Transaction transaction;
 
     public UserService() {
         sessionFactory = SessionFactoryProvider.getSessionFactory();
@@ -19,7 +20,6 @@ public class UserService {
     }
 
     public void createUser(User user) {
-        Transaction transaction = null;
         try (Session currentSession = sessionFactory.getCurrentSession()) {
             transaction = currentSession.beginTransaction();
             userDao.save(user);
@@ -31,7 +31,6 @@ public class UserService {
     }
 
     public User getUserById(Integer id) {
-        Transaction transaction = null;
         try (Session currentSession = sessionFactory.getCurrentSession()) {
             transaction = currentSession.beginTransaction();
             User user = userDao.getById(id);
@@ -47,7 +46,6 @@ public class UserService {
     }
 
     public void updateUser(User user) {
-        Transaction transaction = null;
         try (Session currentSession = sessionFactory.getCurrentSession()) {
             transaction = currentSession.beginTransaction();
             userDao.update(user);
@@ -59,7 +57,6 @@ public class UserService {
     }
 
     public List<User> getAll() {
-        Transaction transaction = null;
         try (Session currentSession = sessionFactory.getCurrentSession()) {
             transaction = currentSession.beginTransaction();
             List<User> users = userDao.findAll();
@@ -72,7 +69,6 @@ public class UserService {
     }
 
     public void deleteUserById(Integer id) {
-        Transaction transaction = null;
         try (Session currentSession = sessionFactory.getCurrentSession()) {
             transaction = currentSession.beginTransaction();
             User user = userDao.getById(id);

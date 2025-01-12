@@ -1,13 +1,20 @@
 package library;
 
-import library.entity.User;
-import library.service.UserService;
+import library.entity.Book;
+import library.entity.Publisher;
+import library.service.BookService;
+import library.service.PublisherService;
+
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
 
-        UserService userService = new UserService();
-        User user = userService.getUserById(1);
-        System.out.println(user);
+        PublisherService service = new PublisherService();
+        Publisher p = service.getPublisherById(1);
+        List<Book> books = p.getBooks();
+        for (Book book : books) {
+            System.out.println(book);
+        }
     }
 }

@@ -1,8 +1,10 @@
 package library.dao;
 
+import jakarta.persistence.NoResultException;
 import library.entity.Publisher;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.NativeQuery;
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ public class PublisherDao {
         this.sessionFactory = sessionFactory;
     }
 
-    public void save(PublisherDao entity) {
+    public void save(Publisher entity) {
         sessionFactory.getCurrentSession().save(entity);
     }
 
@@ -35,5 +37,17 @@ public class PublisherDao {
     public void delete(Publisher publisher) {
         Session session = sessionFactory.getCurrentSession();
         session.remove(publisher);
+    }
+
+    public Publisher getByName(String name) {
+        Session session = sessionFactory.getCurrentSession();
+        NativeQuery<Publisher> query = session
+                .createNativeQuery("select * from publisher where name = ?", Publisher.class);
+        query.setParameter(1, name);
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }
