@@ -1,6 +1,7 @@
 package library.mapper;
 
 import library.dto.BookForLibrarianDto;
+import library.dto.BookForUserDto;
 import library.entity.Book;
 import library.entity.Publisher;
 import library.service.PublisherService;
@@ -29,6 +30,14 @@ public class BookMapper {
                 .publisher(publisher)
                 .publicationYear(dto.getPublicationYear())
                 .isbn(dto.getIsbn())
+                .build();
+    }
+
+    public static BookForUserDto toForUserDto(Book book) {
+        return BookForUserDto.builder()
+                .id(book.getId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
                 .build();
     }
 }

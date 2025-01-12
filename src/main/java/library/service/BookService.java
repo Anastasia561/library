@@ -1,8 +1,11 @@
 package library.service;
 
 import library.dao.BookDao;
+import library.dto.BookForLibrarianDto;
+import library.dto.BookForUserDto;
 import library.entity.Book;
 import library.factory.SessionFactoryProvider;
+import library.mapper.BookMapper;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -19,9 +22,10 @@ public class BookService {
         bookDao = new BookDao(sessionFactory);
     }
 
-    public void createBook(Book book) {
+    public void createBook(BookForLibrarianDto dto) {
         try (Session currentSession = sessionFactory.getCurrentSession()) {
             transaction = currentSession.beginTransaction();
+            Book book = BookMapper.toBookFromForLibrarianDto(dto);
             bookDao.save(book);
             transaction.commit();
         } catch (RuntimeException e) {
@@ -30,7 +34,7 @@ public class BookService {
         }
     }
 
-    public Book getBookById(Integer id) {
+    public BookForLibrarianDto getBookByIdForLibrarian(Integer id) {
         try (Session currentSession = sessionFactory.getCurrentSession()) {
             transaction = currentSession.beginTransaction();
             Book book = bookDao.getById(id);
@@ -38,16 +42,32 @@ public class BookService {
                 throw new RuntimeException("Book does not exists");
             }
             transaction.commit();
-            return book;
+            return BookMapper.toForLibrarianDto(book);
         } catch (RuntimeException e) {
             if (transaction != null) transaction.rollback();
             throw e;
         }
     }
 
-    public void updateBook(Book book) {
+    public BookForUserDto getBookByIdForUser(Integer id) {
         try (Session currentSession = sessionFactory.getCurrentSession()) {
             transaction = currentSession.beginTransaction();
+            Book book = bookDao.getById(id);
+            if (book == null) {
+                throw new RuntimeException("Book does not exists");
+            }
+            transaction.commit();
+            return BookMapper.toForUserDto(book);
+        } catch (RuntimeException e) {
+            if (transaction != null) transaction.rollback();
+            throw e;
+        }
+    }
+
+    public void updateBook(BookForLibrarianDto dto) {
+        try (Session currentSession = sessionFactory.getCurrentSession()) {
+            transaction = currentSession.beginTransaction();
+            Book book = BookMapper.toBookFromForLibrarianDto(dto);
             bookDao.update(book);
             transaction.commit();
         } catch (RuntimeException e) {
@@ -56,12 +76,24 @@ public class BookService {
         }
     }
 
-    public List<Book> getAll() {
+    public List<BookForLibrarianDto> getAllForLibrarian() {
         try (Session currentSession = sessionFactory.getCurrentSession()) {
             transaction = currentSession.beginTransaction();
             List<Book> books = bookDao.findAll();
             transaction.commit();
-            return books;
+            return books.stream().map(BookMapper::toForLibrarianDto).toList();
+        } catch (RuntimeException e) {
+            if (transaction != null) transaction.rollback();
+            throw e;
+        }
+    }
+
+    public List<BookForUserDto> getAllForUser() {
+        try (Session currentSession = sessionFactory.getCurrentSession()) {
+            transaction = currentSession.beginTransaction();
+            List<Book> books = bookDao.findAll();
+            transaction.commit();
+            return books.stream().map(BookMapper::toForUserDto).toList();
         } catch (RuntimeException e) {
             if (transaction != null) transaction.rollback();
             throw e;

@@ -1,8 +1,11 @@
 package library.dao;
 
+import jakarta.persistence.NoResultException;
 import library.entity.Librarian;
+import library.entity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.NativeQuery;
 
 import java.util.List;
 
@@ -35,5 +38,17 @@ public class LibrarianDao {
     public void delete(Librarian librarian) {
         Session session = sessionFactory.getCurrentSession();
         session.remove(librarian);
+    }
+
+    public Librarian getByEmail(String email) {
+        Session session = sessionFactory.getCurrentSession();
+        NativeQuery<Librarian> query = session
+                .createNativeQuery("select * from librarian where email = ?", Librarian.class);
+        query.setParameter(1, email);
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

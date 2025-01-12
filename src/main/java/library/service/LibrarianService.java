@@ -2,6 +2,7 @@ package library.service;
 
 import library.dao.LibrarianDao;
 import library.entity.Librarian;
+import library.entity.User;
 import library.factory.SessionFactoryProvider;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -34,6 +35,21 @@ public class LibrarianService {
         try (Session currentSession = sessionFactory.getCurrentSession()) {
             transaction = currentSession.beginTransaction();
             Librarian librarian = librarianDao.getById(id);
+            if (librarian == null) {
+                throw new RuntimeException("Librarian does not exists");
+            }
+            transaction.commit();
+            return librarian;
+        } catch (RuntimeException e) {
+            if (transaction != null) transaction.rollback();
+            throw e;
+        }
+    }
+
+    public Librarian getLibrarianByEmail(String email) {
+        try (Session currentSession = sessionFactory.getCurrentSession()) {
+            transaction = currentSession.beginTransaction();
+            Librarian librarian = librarianDao.getByEmail(email);
             if (librarian == null) {
                 throw new RuntimeException("Librarian does not exists");
             }

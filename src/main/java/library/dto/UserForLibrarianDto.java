@@ -11,9 +11,12 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserInfoDto {
+public class UserForLibrarianDto {
     private Integer id;
     private String name;
     private String email;
+    private String phoneNumber;
+    private String address;
+    private Boolean isLibrarian;
     private List<BorrowingDto> borrowings;
 }

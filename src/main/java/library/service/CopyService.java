@@ -2,6 +2,7 @@ package library.service;
 
 import library.dao.CopyDao;
 import library.entity.Copy;
+import library.entity.User;
 import library.factory.SessionFactoryProvider;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -34,6 +35,21 @@ public class CopyService {
         try (Session currentSession = sessionFactory.getCurrentSession()) {
             transaction = currentSession.beginTransaction();
             Copy copy = copyDao.getById(id);
+            if (copy == null) {
+                throw new RuntimeException("Copy does not exists");
+            }
+            transaction.commit();
+            return copy;
+        } catch (RuntimeException e) {
+            if (transaction != null) transaction.rollback();
+            throw e;
+        }
+    }
+
+    public Copy getCopyByCopyNumber(Integer copyNumber) {
+        try (Session currentSession = sessionFactory.getCurrentSession()) {
+            transaction = currentSession.beginTransaction();
+            Copy copy = copyDao.getByCopyNumber(copyNumber);
             if (copy == null) {
                 throw new RuntimeException("Copy does not exists");
             }
