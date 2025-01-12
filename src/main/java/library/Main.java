@@ -14,9 +14,15 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-        PublisherService publisherService = new PublisherService();
+        BookService bookService = new BookService();
 
-        Publisher publisher = publisherService.getPublisherByName("test");
+        BookForLibrarianDto dto = BookForLibrarianDto.builder()
+                .title("Test")
+                .author("author test")
+                .publisherName("Penguin Books")
+                .publicationYear(2024)
+                .isbn("99999").build();
 
+        bookService.createBook(dto);
     }
 }

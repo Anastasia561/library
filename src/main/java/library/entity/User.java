@@ -11,6 +11,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
+import library.annotation.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,6 +35,7 @@ public class User {
     private Integer id;
     @Column(nullable = false)
     private String name;
+    @Email
     @Column(unique = true, nullable = false)
     private String email;
     @Column(name = "phone_number", nullable = false)

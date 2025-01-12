@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
+import library.annotation.Isbn;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,6 +42,7 @@ public class Book {
     private Publisher publisher;
     @Column(name = "publication_year", nullable = false)
     private Integer publicationYear;
+    @Isbn
     @Column(unique = true, nullable = false)
     private String isbn;
     @ToString.Exclude

@@ -6,6 +6,7 @@ import library.dto.UserInfoDto;
 import library.entity.User;
 import library.factory.SessionFactoryProvider;
 import library.mapper.UserMapper;
+import library.validator.Validator;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -26,7 +27,9 @@ public class UserService {
         try {
             Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
+
             User user = UserMapper.toUserFromUserForLibrarianDto(dto);
+            Validator.validate(user);
             userDao.save(user);
             transaction.commit();
         } catch (RuntimeException e) {
@@ -87,7 +90,9 @@ public class UserService {
         try {
             Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
+
             User user = UserMapper.toUserFromUserForLibrarianDto(dto);
+            Validator.validate(user);
             userDao.update(user);
             transaction.commit();
         } catch (RuntimeException e) {

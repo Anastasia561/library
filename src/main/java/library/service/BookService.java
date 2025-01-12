@@ -6,6 +6,7 @@ import library.dto.BookForUserDto;
 import library.entity.Book;
 import library.factory.SessionFactoryProvider;
 import library.mapper.BookMapper;
+import library.validator.Validator;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -26,7 +27,9 @@ public class BookService {
         try {
             Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
+
             Book book = BookMapper.toBookFromForLibrarianDto(dto);
+            Validator.validate(book);
             bookDao.save(book);
             transaction.commit();
         } catch (RuntimeException e) {
@@ -71,7 +74,9 @@ public class BookService {
         try {
             Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
+
             Book book = BookMapper.toBookFromForLibrarianDto(dto);
+            Validator.validate(book);
             bookDao.update(book);
             transaction.commit();
         } catch (RuntimeException e) {
