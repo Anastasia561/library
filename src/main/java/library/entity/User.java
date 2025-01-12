@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,4 +46,11 @@ public class User {
     @OneToOne
     @JoinColumn(name = "id", referencedColumnName = "librarian_id", nullable = false)
     private Librarian librarian;
+
+    @PreRemove
+    private void checkForConnections() {
+        if (borrowings != null && !borrowings.isEmpty()) {
+            throw new RuntimeException("User has connections with other entities, can not be deleted");
+        }
+    }
 }

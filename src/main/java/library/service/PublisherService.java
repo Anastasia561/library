@@ -20,7 +20,8 @@ public class PublisherService {
     }
 
     public void createPublisher(Publisher publisher) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             publisherDao.save(publisher);
             transaction.commit();
@@ -31,7 +32,8 @@ public class PublisherService {
     }
 
     public Publisher getPublisherById(Integer id) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             Publisher publisher = publisherDao.getById(id);
             if (publisher == null) {
@@ -45,8 +47,9 @@ public class PublisherService {
         }
     }
 
-    public Publisher getPublisherByName(String name){
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+    public Publisher getPublisherByName(String name) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             Publisher publisher = publisherDao.getByName(name);
             if (publisher == null) {
@@ -61,7 +64,8 @@ public class PublisherService {
     }
 
     public void updatePublisher(Publisher publisher) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             publisherDao.update(publisher);
             transaction.commit();
@@ -72,7 +76,8 @@ public class PublisherService {
     }
 
     public List<Publisher> getAll() {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             List<Publisher> publishers = publisherDao.findAll();
             transaction.commit();
@@ -84,7 +89,8 @@ public class PublisherService {
     }
 
     public void deletePublisherById(Integer id) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             Publisher publisher = publisherDao.getById(id);
             publisherDao.delete(publisher);

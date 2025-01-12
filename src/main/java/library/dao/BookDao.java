@@ -1,6 +1,7 @@
 package library.dao;
 
 import library.entity.Book;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -19,7 +20,12 @@ public class BookDao {
 
     public Book getById(Integer id) {
         Session session = sessionFactory.getCurrentSession();
-        return session.get(Book.class, id);
+//        return session.get(Book.class, id);
+        Book book = session.get(Book.class, id);
+        if (book != null) {
+            Hibernate.initialize(book.getCopies());
+        }
+        return book;
     }
 
     public List<Book> findAll() {

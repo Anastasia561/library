@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,4 +42,11 @@ public class Copy {
     @ToString.Exclude
     @OneToMany(mappedBy = "copy", fetch = FetchType.EAGER)
     private List<Borrowing> borrowings;
+
+    @PreRemove
+    private void checkForConnections() {
+        if (borrowings != null && !borrowings.isEmpty()) {
+            throw new RuntimeException("Copy has connections with other entities, can not be deleted");
+        }
+    }
 }

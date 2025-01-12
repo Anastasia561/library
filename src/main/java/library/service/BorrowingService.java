@@ -22,7 +22,8 @@ public class BorrowingService {
     }
 
     public void createBorrowing(BorrowingDto dto) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             Borrowing borrowing = BorrowingMapper.toBorrowing(dto);
             borrowingDao.save(borrowing);
@@ -34,7 +35,8 @@ public class BorrowingService {
     }
 
     public BorrowingDto getBorrowingById(Integer id) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             Borrowing borrowing = borrowingDao.getById(id);
             if (borrowing == null) {
@@ -49,7 +51,8 @@ public class BorrowingService {
     }
 
     public void updateBorrowing(BorrowingDto dto) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             Borrowing borrowing = BorrowingMapper.toBorrowing(dto);
             borrowingDao.update(borrowing);
@@ -61,7 +64,8 @@ public class BorrowingService {
     }
 
     public List<BorrowingDto> getAll() {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             List<Borrowing> borrowings = borrowingDao.findAll();
             transaction.commit();
@@ -73,7 +77,8 @@ public class BorrowingService {
     }
 
     public void deleteBorrowingById(Integer id) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             Borrowing borrowing = borrowingDao.getById(id);
             borrowingDao.delete(borrowing);

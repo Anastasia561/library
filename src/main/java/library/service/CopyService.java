@@ -21,7 +21,8 @@ public class CopyService {
     }
 
     public void createCopy(Copy copy) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             copyDao.save(copy);
             transaction.commit();
@@ -32,7 +33,8 @@ public class CopyService {
     }
 
     public Copy getCopyById(Integer id) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             Copy copy = copyDao.getById(id);
             if (copy == null) {
@@ -47,7 +49,8 @@ public class CopyService {
     }
 
     public Copy getCopyByCopyNumber(Integer copyNumber) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             Copy copy = copyDao.getByCopyNumber(copyNumber);
             if (copy == null) {
@@ -62,7 +65,8 @@ public class CopyService {
     }
 
     public void updateCopy(Copy copy) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             copyDao.update(copy);
             transaction.commit();
@@ -73,7 +77,8 @@ public class CopyService {
     }
 
     public List<Copy> getAll() {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             List<Copy> copies = copyDao.findAll();
             transaction.commit();
@@ -85,7 +90,8 @@ public class CopyService {
     }
 
     public void deleteCopyById(Integer id) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             Copy copy = copyDao.getById(id);
             copyDao.delete(copy);

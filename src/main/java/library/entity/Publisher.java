@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,4 +39,11 @@ public class Publisher {
     @ToString.Exclude
     @OneToMany(mappedBy = "publisher", fetch = FetchType.EAGER)
     private List<Book> books;
+
+    @PreRemove
+    private void checkForConnections() {
+        if (books != null && !books.isEmpty()) {
+            throw new RuntimeException("Publisher has connections with other entities, can not be deleted");
+        }
+    }
 }

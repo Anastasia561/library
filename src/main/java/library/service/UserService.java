@@ -23,7 +23,8 @@ public class UserService {
     }
 
     public void createUser(UserForLibrarianDto dto) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             User user = UserMapper.toUserFromUserForLibrarianDto(dto);
             userDao.save(user);
@@ -35,7 +36,8 @@ public class UserService {
     }
 
     public UserForLibrarianDto getUserByIdForLibrarian(Integer id) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             User user = userDao.getById(id);
             if (user == null) {
@@ -50,7 +52,8 @@ public class UserService {
     }
 
     public UserInfoDto getUserByIdInfo(Integer id) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             User user = userDao.getById(id);
             if (user == null) {
@@ -65,7 +68,8 @@ public class UserService {
     }
 
     public UserForLibrarianDto getUserByEmailForLibrarian(String email) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             User user = userDao.getByEmail(email);
             if (user == null) {
@@ -80,7 +84,8 @@ public class UserService {
     }
 
     public void updateUser(UserForLibrarianDto dto) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             User user = UserMapper.toUserFromUserForLibrarianDto(dto);
             userDao.update(user);
@@ -92,7 +97,8 @@ public class UserService {
     }
 
     public List<UserForLibrarianDto> getAllForLibrarian() {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             List<User> users = userDao.findAll();
             transaction.commit();
@@ -104,7 +110,8 @@ public class UserService {
     }
 
     public void deleteUserById(Integer id) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             User user = userDao.getById(id);
             userDao.delete(user);

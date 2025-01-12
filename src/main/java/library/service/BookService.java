@@ -23,7 +23,8 @@ public class BookService {
     }
 
     public void createBook(BookForLibrarianDto dto) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             Book book = BookMapper.toBookFromForLibrarianDto(dto);
             bookDao.save(book);
@@ -35,7 +36,8 @@ public class BookService {
     }
 
     public BookForLibrarianDto getBookByIdForLibrarian(Integer id) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             Book book = bookDao.getById(id);
             if (book == null) {
@@ -50,7 +52,8 @@ public class BookService {
     }
 
     public BookForUserDto getBookByIdForUser(Integer id) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             Book book = bookDao.getById(id);
             if (book == null) {
@@ -65,7 +68,8 @@ public class BookService {
     }
 
     public void updateBook(BookForLibrarianDto dto) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             Book book = BookMapper.toBookFromForLibrarianDto(dto);
             bookDao.update(book);
@@ -77,7 +81,8 @@ public class BookService {
     }
 
     public List<BookForLibrarianDto> getAllForLibrarian() {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             List<Book> books = bookDao.findAll();
             transaction.commit();
@@ -89,7 +94,8 @@ public class BookService {
     }
 
     public List<BookForUserDto> getAllForUser() {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             List<Book> books = bookDao.findAll();
             transaction.commit();
@@ -101,7 +107,8 @@ public class BookService {
     }
 
     public void deleteBookById(Integer id) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             Book book = bookDao.getById(id);
             bookDao.delete(book);

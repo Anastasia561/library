@@ -21,7 +21,8 @@ public class LibrarianService {
     }
 
     public void createUser(Librarian librarian) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             librarianDao.save(librarian);
             transaction.commit();
@@ -32,7 +33,8 @@ public class LibrarianService {
     }
 
     public Librarian getLibrarianById(Integer id) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             Librarian librarian = librarianDao.getById(id);
             if (librarian == null) {
@@ -47,7 +49,8 @@ public class LibrarianService {
     }
 
     public Librarian getLibrarianByEmail(String email) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             Librarian librarian = librarianDao.getByEmail(email);
             if (librarian == null) {
@@ -62,7 +65,8 @@ public class LibrarianService {
     }
 
     public void updateLibrarian(Librarian librarian) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             librarianDao.update(librarian);
             transaction.commit();
@@ -73,7 +77,8 @@ public class LibrarianService {
     }
 
     public List<Librarian> getAll() {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             List<Librarian> librarians = librarianDao.findAll();
             transaction.commit();
@@ -85,7 +90,8 @@ public class LibrarianService {
     }
 
     public void deleteLibrarianById(Integer id) {
-        try (Session currentSession = sessionFactory.getCurrentSession()) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
             Librarian librarian = librarianDao.getById(id);
             librarianDao.delete(librarian);

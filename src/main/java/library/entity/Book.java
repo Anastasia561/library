@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,4 +46,11 @@ public class Book {
     @ToString.Exclude
     @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
     private List<Copy> copies;
+
+    @PreRemove
+    private void checkForConnections() {
+        if (copies != null && !copies.isEmpty()) {
+            throw new RuntimeException("Book has connections with other entities, can not be deleted");
+        }
+    }
 }
