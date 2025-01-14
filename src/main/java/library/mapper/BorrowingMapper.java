@@ -16,7 +16,6 @@ public class BorrowingMapper {
                 .userEmail(borrowing.getUser().getEmail())
                 .copyNumber(borrowing.getCopy().getCopyNumber())
                 .bookTitle(borrowing.getCopy().getBook().getTitle())
-                .bookTitle(borrowing.getCopy().getBook().getAuthor())
                 .author(borrowing.getCopy().getBook().getAuthor())
                 .isbn(borrowing.getCopy().getBook().getIsbn())
                 .borrowDate(borrowing.getBorrowDate())

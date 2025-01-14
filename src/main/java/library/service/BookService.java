@@ -111,6 +111,22 @@ public class BookService {
         }
     }
 
+    public List<BookForUserDto> getAllAvailableForUser() {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
+            transaction = currentSession.beginTransaction();
+            List<Book> books = bookDao.findAll();
+            List<Book> available = books.stream().filter(e ->
+                    e.getCopies().stream().anyMatch(a -> a.getStatus().equals("Available"))).toList();
+            transaction.commit();
+            return available.stream().map(BookMapper::toForUserDto).toList();
+        } catch (RuntimeException e) {
+            if (transaction != null) transaction.rollback();
+            throw e;
+        }
+    }
+
+
     public void deleteBookById(Integer id) {
         try {
             Session currentSession = sessionFactory.getCurrentSession();

@@ -41,11 +41,6 @@ public class UserTableModel extends AbstractTableModel {
         };
     }
 
-    @Override
-    public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return false;
-    }
-
     public void addUser(List<UserForLibrarianDto> users) {
         this.users = users;
         fireTableDataChanged();

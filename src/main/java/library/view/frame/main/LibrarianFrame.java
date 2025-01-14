@@ -2,8 +2,6 @@ package library.view.frame.main;
 
 import library.controller.Controller;
 import library.dto.UserForLibrarianDto;
-import library.service.LibrarianService;
-import library.service.UserService;
 import library.view.frame.creational.UserCreationFrame;
 import library.view.table_model.UserTableModel;
 
@@ -19,11 +17,15 @@ public class LibrarianFrame extends JFrame {
     private final JPanel rightPanel;
     private JTable userTable;
     private JPanel buttonsPanel;
-    private Controller controller;
+    private final Controller controller;
+    private final String userEmail;
 
-    public LibrarianFrame(Controller controller) {
+    public LibrarianFrame(Controller controller, String userEmail) {
         this.controller = controller;
-        setTitle("Library");
+        this.userEmail = userEmail;
+        setTitle("LIBRARY [Logged in as: "
+                + controller.getUserNameByEmail(userEmail)
+                + "] [" + userEmail + "]");
         setSize(1000, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -105,7 +107,7 @@ public class LibrarianFrame extends JFrame {
         JButton addUserButton = new JButton("Add User");
         addUserButton.setFocusable(false);
         addUserButton.addActionListener(e -> {
-            new UserCreationFrame(new Controller(new UserService(), new LibrarianService()), false);
+            new UserCreationFrame(controller, false);
             userTableModel.addUser(controller.getAllUserDto());
             buttonsPanel = createButtons();
             revalidate();
@@ -115,7 +117,7 @@ public class LibrarianFrame extends JFrame {
         JButton addLibrarianButton = new JButton("Add Librarian");
         addLibrarianButton.setFocusable(false);
         addLibrarianButton.addActionListener(e -> {
-            new UserCreationFrame(new Controller(new UserService(), new LibrarianService()), true);
+            new UserCreationFrame(controller, true);
             userTableModel.addUser(controller.getAllUserDto());
             buttonsPanel = createButtons();
             revalidate();
@@ -135,7 +137,8 @@ public class LibrarianFrame extends JFrame {
         JButton logOutButton = new JButton("Log out");
         logOutButton.setFocusable(false);
         logOutButton.addActionListener(e -> {
-
+            new StartFrame(controller);
+            this.dispose();
         });
         return logOutButton;
     }
