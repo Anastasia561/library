@@ -2,12 +2,12 @@ package library.service;
 
 import library.dao.LibrarianDao;
 import library.entity.Librarian;
-import library.entity.User;
 import library.factory.SessionFactoryProvider;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class LibrarianService {
@@ -20,11 +20,15 @@ public class LibrarianService {
         librarianDao = new LibrarianDao(sessionFactory);
     }
 
-    public void createUser(Librarian librarian) {
+    public void createLibrarian(Librarian librarian) {
         try {
             Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
-            librarianDao.save(librarian);
+            if (librarian.getEmploymentDate().isAfter(LocalDate.now())) {
+                throw new RuntimeException("Employment date is in the future");
+            } else {
+                librarianDao.save(librarian);
+            }
             transaction.commit();
         } catch (RuntimeException e) {
             if (transaction != null) transaction.rollback();

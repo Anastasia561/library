@@ -2,7 +2,6 @@ package library.mapper;
 
 import library.dto.UserForLibrarianDto;
 import library.dto.UserInfoDto;
-import library.entity.Librarian;
 import library.entity.User;
 import library.service.LibrarianService;
 
@@ -35,17 +34,20 @@ public class UserMapper {
 
     public static User toUserFromUserForLibrarianDto(UserForLibrarianDto dto) {
         LibrarianService librarianService = new LibrarianService();
-        Librarian librarian = librarianService.getLibrarianByEmail(dto.getEmail());
-        return User.builder()
+
+        User user = User.builder()
                 .id(dto.getId())
                 .name(dto.getName())
                 .email(dto.getEmail())
                 .phoneNumber(dto.getPhoneNumber())
                 .address(dto.getAddress())
-                .borrowings(dto.getBorrowings()
-                        .stream()
-                        .map(BorrowingMapper::toBorrowing).toList())
-                .librarian(librarian)
                 .build();
+
+        if (dto.getBorrowings() != null) {
+            user.setBorrowings((dto.getBorrowings()
+                    .stream()
+                    .map(BorrowingMapper::toBorrowing).toList()));
+        }
+        return user;
     }
 }

@@ -30,7 +30,11 @@ public class UserService {
 
             User user = UserMapper.toUserFromUserForLibrarianDto(dto);
             Validator.validate(user);
-            userDao.save(user);
+            if (userDao.getByEmail(dto.getEmail()) == null) {
+                userDao.save(user);
+            } else {
+                throw new RuntimeException("Email is not unique");
+            }
             transaction.commit();
         } catch (RuntimeException e) {
             if (transaction != null) transaction.rollback();

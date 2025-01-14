@@ -2,10 +2,10 @@ package library.dao;
 
 import jakarta.persistence.NoResultException;
 import library.entity.Librarian;
-import library.entity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -17,7 +17,14 @@ public class LibrarianDao {
     }
 
     public void save(Librarian entity) {
-        sessionFactory.getCurrentSession().save(entity);
+        NativeQuery<Librarian> query = sessionFactory.getCurrentSession()
+                .createNativeQuery("insert into librarian " +
+                        "(employment_date, position, user_id) " +
+                        "values (?, ?, ?)", Librarian.class);
+        query.setParameter(1, entity.getEmploymentDate());
+        query.setParameter(2, entity.getPosition());
+        query.setParameter(3, entity.getUser().getId());
+        query.executeUpdate();
     }
 
     public Librarian getById(Integer id) {
@@ -42,9 +49,9 @@ public class LibrarianDao {
 
     public Librarian getByEmail(String email) {
         Session session = sessionFactory.getCurrentSession();
-        NativeQuery<Librarian> query = session
-                .createNativeQuery("select * from librarian where email = ?", Librarian.class);
-        query.setParameter(1, email);
+        Query<Librarian> query = session
+                .createQuery("from Librarian l where l.user.email=:email", Librarian.class);
+        query.setParameter("email", email);
         try {
             return query.getSingleResult();
         } catch (NoResultException e) {
