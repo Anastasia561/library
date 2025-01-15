@@ -12,7 +12,7 @@ import java.util.List;
 
 public class UserFrame extends JFrame {
     private JList<String> optionList;
-    private final JPanel rightPanel;
+    private JPanel rightPanel;
     private final Controller controller;
     private final String userEmail;
 
@@ -22,7 +22,7 @@ public class UserFrame extends JFrame {
         setTitle("LIBRARY [Logged in as: "
                 + controller.getUserNameByEmail(userEmail)
                 + "] [" + userEmail + "]");
-        setSize(800, 400);
+        setSize(900, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         setResizable(false);
@@ -71,17 +71,21 @@ public class UserFrame extends JFrame {
         showButton.addActionListener(e -> {
             String selectedOption = optionList.getSelectedValue();
             if (selectedOption != null) {
+
                 if (!rightPanel.isVisible()) {
                     rightPanel.setVisible(true);
                 }
+
                 JScrollPane pane;
+
                 if (selectedOption.equals("Available books")) {
-                    pane = createAvailableBookTable();
+                    pane = createBookTable(controller.getAvailableBookForUserDto());
                 } else if (selectedOption.equals("All books")) {
-                    pane = createBookTable();
+                    pane = createBookTable(controller.getAllBookForUserDto());
                 } else {
                     pane = createBorrowingsTable();
                 }
+                rightPanel.removeAll();
                 rightPanel.add(pane);
                 revalidate();
                 repaint();
@@ -102,27 +106,20 @@ public class UserFrame extends JFrame {
         return logOutButton;
     }
 
-    private JScrollPane createBookTable() {
-        List<BookForUserDto> books = controller.getAllBookForUserDto();
+    private JScrollPane createBookTable(List<BookForUserDto> books) {
         BookTableModel bookTableModel = new BookTableModel(books);
         JTable bookTable = new JTable(bookTableModel);
-
-        return new JScrollPane(bookTable);
-    }
-
-    private JScrollPane createAvailableBookTable() {
-        List<BookForUserDto> available = controller.getAvailableBookForUserDto();
-        BookTableModel bookTableModel = new BookTableModel(available);
-        JTable bookTable = new JTable(bookTableModel);
-
-        return new JScrollPane(bookTable);
+        JScrollPane pane = new JScrollPane(bookTable);
+        pane.setPreferredSize(new Dimension(getWidth() * 2 / 3 - 30, getHeight()));
+        return pane;
     }
 
     private JScrollPane createBorrowingsTable() {
         List<BorrowingDto> borrowings = controller.getAllBorrowingsForUserByEmail(userEmail);
         BorrowingTableModel borrowingTableModel = new BorrowingTableModel(borrowings);
         JTable bookTable = new JTable(borrowingTableModel);
-
-        return new JScrollPane(bookTable);
+        JScrollPane pane = new JScrollPane(bookTable);
+        pane.setPreferredSize(new Dimension(getWidth() * 2 / 3 - 30, getHeight()));
+        return pane;
     }
 }
