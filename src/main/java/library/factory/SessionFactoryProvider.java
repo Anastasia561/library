@@ -10,9 +10,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 public class SessionFactoryProvider {
-    public static SessionFactory getSessionFactory() {
+    public static SessionFactory getSessionFactory(String cfgPath) {
         return new Configuration()
-                .configure()
+                .configure(cfgPath)
                 .addAnnotatedClass(Book.class)
                 .addAnnotatedClass(Borrowing.class)
                 .addAnnotatedClass(Copy.class)

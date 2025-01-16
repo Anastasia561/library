@@ -17,7 +17,7 @@ public class BorrowingService {
     private Transaction transaction;
 
     public BorrowingService() {
-        sessionFactory = SessionFactoryProvider.getSessionFactory();
+        sessionFactory = SessionFactoryProvider.getSessionFactory("hibernate.cfg.xml");
         borrowingDao = new BorrowingDao(sessionFactory);
     }
 

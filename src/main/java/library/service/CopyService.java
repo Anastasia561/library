@@ -16,7 +16,7 @@ public class CopyService {
     private Transaction transaction;
 
     public CopyService() {
-        sessionFactory = SessionFactoryProvider.getSessionFactory();
+        sessionFactory = SessionFactoryProvider.getSessionFactory("hibernate.cfg.xml");
         copyDao = new CopyDao(sessionFactory);
     }
 

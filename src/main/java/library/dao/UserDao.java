@@ -43,7 +43,7 @@ public class UserDao {
     public User getByEmail(String email) {
         Session session = sessionFactory.getCurrentSession();
         NativeQuery<User> query = session
-                .createNativeQuery("select * from user where email = ?", User.class);
+                .createNativeQuery("select * from \"user\" where email = ?", User.class);
         query.setParameter(1, email);
         try {
             return query.getSingleResult();

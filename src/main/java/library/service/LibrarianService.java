@@ -16,7 +16,7 @@ public class LibrarianService {
     private Transaction transaction;
 
     public LibrarianService() {
-        sessionFactory = SessionFactoryProvider.getSessionFactory();
+        sessionFactory = SessionFactoryProvider.getSessionFactory("hibernate.cfg.xml");
         librarianDao = new LibrarianDao(sessionFactory);
     }
 

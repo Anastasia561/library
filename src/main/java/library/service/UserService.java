@@ -19,7 +19,7 @@ public class UserService {
     private Transaction transaction;
 
     public UserService() {
-        sessionFactory = SessionFactoryProvider.getSessionFactory();
+        sessionFactory = SessionFactoryProvider.getSessionFactory("hibernate.cfg.xml");
         userDao = new UserDao(sessionFactory);
     }
 
