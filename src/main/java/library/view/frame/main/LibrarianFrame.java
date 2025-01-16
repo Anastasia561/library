@@ -1,21 +1,31 @@
 package library.view.frame.main;
 
 import library.controller.Controller;
+import library.dto.BookForLibrarianDto;
+import library.dto.BorrowingDto;
 import library.dto.UserForLibrarianDto;
 import library.view.frame.creational.UserCreationFrame;
+import library.view.table_model.BookForLibrarianTableModel;
+import library.view.table_model.BookForUserTableModel;
+import library.view.table_model.BorrowingForLibrarianTableModel;
+import library.view.table_model.BorrowingForUserTableModel;
 import library.view.table_model.UserTableModel;
 
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 
 public class LibrarianFrame extends JFrame {
     private JList<String> optionList;
-    private JScrollPane userPane;
-    private UserTableModel userTableModel;
-    private final JPanel rightPanel;
-    private JTable userTable;
+    private JScrollPane pane;
+    //private UserTableModel userTableModel;
+//    private BookForUserTableModel bookTableModel;
+//    private BorrowingForUserTableModel borrowingTableModel;
+    private AbstractTableModel tableModel;
+    private JPanel rightPanel;
+    // private JTable userTable;
     private JPanel buttonsPanel;
     private final Controller controller;
     private final String userEmail;
@@ -79,22 +89,55 @@ public class LibrarianFrame extends JFrame {
 
                 //controller.readDataFrom(selectedData).runModel();
 
-                if (!rightPanel.isVisible()) {
-                    rightPanel.setVisible(true);
-                    userPane = createTable();
-                    buttonsPanel = createButtons();
+//                if (!rightPanel.isVisible()) {
+//                    rightPanel.setVisible(true);
+//                }
 
-                    rightPanel.add(userPane);
-                    rightPanel.add(buttonsPanel, BorderLayout.EAST);
-                } else {
-                    //updateWholeTable();
-                }
+                showTable(selectedOption);
+//                pane = createUserTable();
+//                buttonsPanel = createButtons(userTableModel);
+//
+//                rightPanel.add(pane);
+//                rightPanel.add(buttonsPanel, BorderLayout.EAST);
 
             } else {
                 JOptionPane.showMessageDialog(this, "Please select option first");
             }
         });
         return showButton;
+    }
+
+    private void showTable(String choice) {
+        if (!rightPanel.isVisible()) {
+            rightPanel.setVisible(true);
+        }
+        //rightPanel.remove(pane);
+        switch (choice) {
+            case "Users" -> {
+                pane = createUserTable();
+                //rightPanel = createRightPanel();
+            }
+
+            case "Books" -> {
+                pane = createBookTable();
+                //rightPanel = createRightPanel();
+            }
+
+            case "Borrowings" -> {
+                pane = createBorrowingTable();
+                //rightPanel = createRightPanel();
+            }
+        }
+
+        buttonsPanel = createButtons();
+        rightPanel.add(pane);
+        rightPanel.add(buttonsPanel, BorderLayout.EAST);
+
+//        JPanel newButtonPanel = (JPanel) createRightPanel().getComponent(1);
+//        rightPanel.add(newButtonPanel, BorderLayout.SOUTH);
+
+        rightPanel.revalidate();
+        rightPanel.repaint();
     }
 
     private JPanel createRightPanel() {
@@ -104,28 +147,42 @@ public class LibrarianFrame extends JFrame {
         JPanel bPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         bPanel.setPreferredSize(new Dimension(getWidth() * 4 / 5 - 20, 40));
 
-        JButton addUserButton = new JButton("Add User");
-        addUserButton.setFocusable(false);
-        addUserButton.addActionListener(e -> {
-            new UserCreationFrame(controller, false);
-            userTableModel.addUser(controller.getAllUserDto());
-            buttonsPanel = createButtons();
-            revalidate();
-            repaint();
-        });
+        if (tableModel instanceof UserTableModel) {
+            JButton addUserButton = new JButton("Add User");
+            addUserButton.setFocusable(false);
+            addUserButton.addActionListener(e -> {
+                new UserCreationFrame(controller, false);
+                refreshTableAndButtons();
+            });
 
-        JButton addLibrarianButton = new JButton("Add Librarian");
-        addLibrarianButton.setFocusable(false);
-        addLibrarianButton.addActionListener(e -> {
-            new UserCreationFrame(controller, true);
-            userTableModel.addUser(controller.getAllUserDto());
-            buttonsPanel = createButtons();
-            revalidate();
-            repaint();
-        });
+            JButton addLibrarianButton = new JButton("Add Librarian");
+            addLibrarianButton.setFocusable(false);
+            addLibrarianButton.addActionListener(e -> {
+                new UserCreationFrame(controller, true);
+                refreshTableAndButtons();
+            });
 
-        bPanel.add(addLibrarianButton);
-        bPanel.add(addUserButton);
+            bPanel.add(addLibrarianButton);
+            bPanel.add(addUserButton);
+        } else if (tableModel instanceof BookForLibrarianTableModel) {
+            JButton addBookButton = new JButton("Add Book");
+            addBookButton.setFocusable(false);
+            addBookButton.addActionListener(e -> {
+                //new BookCreationFrame(controller);
+                refreshTableAndButtons();
+            });
+
+            bPanel.add(addBookButton);
+        } else if (tableModel instanceof BorrowingForLibrarianTableModel) {
+            JButton addBorrowingButton = new JButton("Add Borrowing");
+            addBorrowingButton.setFocusable(false);
+            addBorrowingButton.addActionListener(e -> {
+                //new BorrowingCreationFrame(controller, true);
+                refreshTableAndButtons();
+            });
+
+            bPanel.add(addBorrowingButton);
+        }
 
         rightPanel.add(bPanel, BorderLayout.SOUTH);
         rightPanel.add(tablePanel, BorderLayout.NORTH);
@@ -144,7 +201,8 @@ public class LibrarianFrame extends JFrame {
     }
 
     private JPanel createButtons() {
-        int rowCount = userTableModel.getRowCount();
+//        int rowCount = userTableModel.getRowCount();
+        int rowCount = tableModel.getRowCount();
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout());
         buttonPanel.setPreferredSize(new Dimension(60, rightPanel.getHeight() - 40));
@@ -180,28 +238,63 @@ public class LibrarianFrame extends JFrame {
     }
 
     private void onDeleteClicked(int rowIndex) {
-        System.out.println("Delete clicked for row: " + rowIndex);
-        String userEmail = (String) userTableModel.getValueAt(rowIndex, 1);
-        //        String isLibrarianStr = (String)
-        //                (userTableModel.getValueAt(
-        //                        rowIndex, userTableModel.getColumnCount() - 1));
-        //        Boolean userIsLibrarian = Boolean.valueOf(isLibrarianStr);
-        //        if(userIsLibrarian){
-        //
-        //        }
+        //System.out.println("Delete clicked for row: " + rowIndex);
+
         try {
-            controller.deleteUserByEmail(userEmail);
+            if (tableModel instanceof UserTableModel) {
+                String userEmail = (String) tableModel.getValueAt(rowIndex, 1);
+                controller.deleteUserByEmail(userEmail);
+            } else if (tableModel instanceof BookForLibrarianTableModel) {
+                String isbn = (String) tableModel.getValueAt(rowIndex, 4);
+                controller.deleteBookByIsbn(isbn);
+            } else if (tableModel instanceof BorrowingForLibrarianTableModel) {
+                Integer id = (Integer) tableModel.getValueAt(rowIndex, 0);
+                controller.deleteBorrowingById(id);
+            }
+
+            refreshTableAndButtons();
         } catch (RuntimeException e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
 
     }
 
-    private JScrollPane createTable() {
+    private JScrollPane createUserTable() {
         List<UserForLibrarianDto> users = controller.getAllUserDto();
-        userTableModel = new UserTableModel(users);
-        userTable = new JTable(userTableModel);
+        tableModel = new UserTableModel(users);
+        return new JScrollPane(new JTable(tableModel));
+    }
 
-        return new JScrollPane(userTable);
+    private JScrollPane createBookTable() {
+        List<BookForLibrarianDto> books = controller.getAllBookDto();
+        tableModel = new BookForLibrarianTableModel(books);
+        return new JScrollPane(new JTable(tableModel));
+    }
+
+    private JScrollPane createBorrowingTable() {
+        List<BorrowingDto> borrowings = controller.getAllBorrowing();
+        tableModel = new BorrowingForLibrarianTableModel(borrowings);
+        return new JScrollPane(new JTable(tableModel));
+    }
+
+    private void refreshTableAndButtons() {
+        List<UserForLibrarianDto> users = controller.getAllUserDto();
+        List<BookForLibrarianDto> books = controller.getAllBookDto();
+        List<BorrowingDto> borrowings = controller.getAllBorrowing();
+        if (tableModel instanceof UserTableModel) {
+            ((UserTableModel) tableModel).addUsers(users);
+        } else if (tableModel instanceof BookForLibrarianTableModel) {
+            ((BookForLibrarianTableModel) tableModel).addBooks(books);
+        } else if (tableModel instanceof BorrowingForLibrarianTableModel) {
+            ((BorrowingForLibrarianTableModel) tableModel).addBorrowings(borrowings);
+        }
+
+        JPanel newButtonsPanel = createButtons();
+        rightPanel.remove(buttonsPanel);
+        buttonsPanel = newButtonsPanel;
+        rightPanel.add(buttonsPanel, BorderLayout.EAST);
+
+        rightPanel.revalidate();
+        rightPanel.repaint();
     }
 }

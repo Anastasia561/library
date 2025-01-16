@@ -3,8 +3,8 @@ package library.view.frame.main;
 import library.controller.Controller;
 import library.dto.BookForUserDto;
 import library.dto.BorrowingDto;
-import library.view.table_model.BookTableModel;
-import library.view.table_model.BorrowingTableModel;
+import library.view.table_model.BookForUserTableModel;
+import library.view.table_model.BorrowingForUserTableModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class UserFrame extends JFrame {
     private JList<String> optionList;
-    private JPanel rightPanel;
+    private final JPanel rightPanel;
     private final Controller controller;
     private final String userEmail;
 
@@ -107,7 +107,7 @@ public class UserFrame extends JFrame {
     }
 
     private JScrollPane createBookTable(List<BookForUserDto> books) {
-        BookTableModel bookTableModel = new BookTableModel(books);
+        BookForUserTableModel bookTableModel = new BookForUserTableModel(books);
         JTable bookTable = new JTable(bookTableModel);
         JScrollPane pane = new JScrollPane(bookTable);
         pane.setPreferredSize(new Dimension(getWidth() * 2 / 3 - 30, getHeight()));
@@ -116,7 +116,7 @@ public class UserFrame extends JFrame {
 
     private JScrollPane createBorrowingsTable() {
         List<BorrowingDto> borrowings = controller.getAllBorrowingsForUserByEmail(userEmail);
-        BorrowingTableModel borrowingTableModel = new BorrowingTableModel(borrowings);
+        BorrowingForUserTableModel borrowingTableModel = new BorrowingForUserTableModel(borrowings);
         JTable bookTable = new JTable(borrowingTableModel);
         JScrollPane pane = new JScrollPane(bookTable);
         pane.setPreferredSize(new Dimension(getWidth() * 2 / 3 - 30, getHeight()));

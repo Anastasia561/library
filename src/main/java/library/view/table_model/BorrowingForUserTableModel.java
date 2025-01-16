@@ -3,13 +3,14 @@ package library.view.table_model;
 import library.dto.BorrowingDto;
 
 import javax.swing.table.AbstractTableModel;
+import java.time.LocalDate;
 import java.util.List;
 
-public class BorrowingTableModel extends AbstractTableModel {
+public class BorrowingForUserTableModel extends AbstractTableModel {
     private final String[] columnNames = {"Title", "Author", "Copy Number", "Borrow Date", "Return Date"};
     private List<BorrowingDto> borrowings;
 
-    public BorrowingTableModel(List<BorrowingDto> borrowings) {
+    public BorrowingForUserTableModel(List<BorrowingDto> borrowings) {
         this.borrowings = borrowings;
     }
 
@@ -36,7 +37,13 @@ public class BorrowingTableModel extends AbstractTableModel {
             case 1 -> dto.getAuthor();
             case 2 -> dto.getCopyNumber();
             case 3 -> dto.getBorrowDate();
-            case 4 -> dto.getReturnDate();
+            case 4 -> {
+                LocalDate returnDate = dto.getReturnDate();
+                if (returnDate == null) {
+                    yield "-";
+                }
+                yield returnDate;
+            }
             default -> null;
         };
     }

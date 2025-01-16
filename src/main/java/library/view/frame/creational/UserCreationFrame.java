@@ -118,8 +118,6 @@ public class UserCreationFrame extends JFrame {
                 } catch (RuntimeException a) {
                     JOptionPane.showMessageDialog(this, a.getMessage());
                 }
-
-
             }
         });
 

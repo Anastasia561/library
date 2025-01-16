@@ -18,6 +18,6 @@ public class BookForLibrarianDto {
     private String publisherName;
     private Integer publicationYear;
     private String isbn;
-    private Long allCopies;
-    private Long availableCopies;
+    private Long allCopiesCount;
+    private Long availableCopiesCount;
 }

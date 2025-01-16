@@ -1,9 +1,12 @@
 package library.dao;
 
+import jakarta.persistence.NoResultException;
 import library.entity.Book;
+import library.entity.User;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.NativeQuery;
 
 import java.util.List;
 
@@ -41,5 +44,17 @@ public class BookDao {
     public void delete(Book book) {
         Session session = sessionFactory.getCurrentSession();
         session.remove(book);
+    }
+
+    public Book getByIsbn(String isbn) {
+        Session session = sessionFactory.getCurrentSession();
+        NativeQuery<Book> query = session
+                .createNativeQuery("select * from book where isbn = ?", Book.class);
+        query.setParameter(1, isbn);
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

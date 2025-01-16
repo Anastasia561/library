@@ -15,10 +15,11 @@ public class BookMapper {
                 .id(book.getId())
                 .title(book.getTitle())
                 .author(book.getAuthor())
+                .publicationYear(book.getPublicationYear())
                 .publisherName(book.getPublisher().getName())
                 .isbn(book.getIsbn())
-                .allCopies((long) book.getCopies().size())
-                .availableCopies(availableCopiesCount).build();
+                .allCopiesCount((long) book.getCopies().size())
+                .availableCopiesCount(availableCopiesCount).build();
     }
 
     public static Book toBookFromForLibrarianDto(BookForLibrarianDto dto) {

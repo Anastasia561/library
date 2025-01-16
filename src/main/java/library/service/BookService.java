@@ -38,6 +38,22 @@ public class BookService {
         }
     }
 
+    public BookForLibrarianDto getBookByIsbnForLibrarian(String isbn) {
+        try {
+            Session currentSession = sessionFactory.getCurrentSession();
+            transaction = currentSession.beginTransaction();
+            Book book = bookDao.getByIsbn(isbn);
+            if (book == null) {
+                throw new RuntimeException("Book does not exists");
+            }
+            transaction.commit();
+            return BookMapper.toForLibrarianDto(book);
+        } catch (RuntimeException e) {
+            if (transaction != null) transaction.rollback();
+            throw e;
+        }
+    }
+
     public BookForLibrarianDto getBookByIdForLibrarian(Integer id) {
         try {
             Session currentSession = sessionFactory.getCurrentSession();

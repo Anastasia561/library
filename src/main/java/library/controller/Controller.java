@@ -1,5 +1,6 @@
 package library.controller;
 
+import library.dto.BookForLibrarianDto;
 import library.dto.BookForUserDto;
 import library.dto.BorrowingDto;
 import library.dto.UserForLibrarianDto;
@@ -53,11 +54,22 @@ public class Controller {
                 .position(position)
                 .user(user)
                 .build();
+
         librarianService.createLibrarian(librarian);
+        dto.setIsLibrarian(true);
+        userService.updateUser(dto);
     }
 
     public List<UserForLibrarianDto> getAllUserDto() {
         return userService.getAllForLibrarian();
+    }
+
+    public List<BookForLibrarianDto> getAllBookDto() {
+        return bookService.getAllForLibrarian();
+    }
+
+    public List<BorrowingDto> getAllBorrowing() {
+        return borrowingService.getAll();
     }
 
     public void deleteUserByEmail(String email) {
@@ -65,7 +77,11 @@ public class Controller {
         Integer id = dto.getId();
         Boolean isLibrarian = dto.getIsLibrarian();
         if (isLibrarian) {
-            throw new RuntimeException("Not allowed to delete librarians");
+            Librarian librarian = librarianService.getLibrarianByEmail(email);
+//            librarianService.deleteLibrarianById(librarian.getId());
+            librarian = librarianService.getLibrarianById(librarian.getId());
+            librarianService.deleteLibrarianById(librarian.getId());
+            //throw new RuntimeException("Not allowed to delete librarians");
         }
         userService.deleteUserById(id);
     }
@@ -90,5 +106,14 @@ public class Controller {
 
     public boolean checkIfIsLibrarian(String email) {
         return userService.getUserByEmailForLibrarian(email).getIsLibrarian();
+    }
+
+    public void deleteBookByIsbn(String isbn) {
+        Integer id = bookService.getBookByIsbnForLibrarian(isbn).getId();
+        bookService.deleteBookById(id);
+    }
+
+    public void deleteBorrowingById(Integer id) {
+        borrowingService.deleteBorrowingById(id);
     }
 }

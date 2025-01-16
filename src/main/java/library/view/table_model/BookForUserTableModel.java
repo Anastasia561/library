@@ -5,11 +5,11 @@ import library.dto.BookForUserDto;
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
-public class BookTableModel extends AbstractTableModel {
+public class BookForUserTableModel extends AbstractTableModel {
     private final String[] columnNames = {"Title", "Author"};
     private List<BookForUserDto> books;
 
-    public BookTableModel(List<BookForUserDto> books) {
+    public BookForUserTableModel(List<BookForUserDto> books) {
         this.books = books;
     }
 

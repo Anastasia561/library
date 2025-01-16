@@ -5,15 +5,15 @@ import library.service.BookService;
 import library.service.BorrowingService;
 import library.service.LibrarianService;
 import library.service.UserService;
-import library.view.frame.main.StartFrame;
+import library.view.frame.main.LibrarianFrame;
 
 import javax.swing.*;
 
 public class Runner {
     public void run() {
         SwingUtilities.invokeLater(() -> {
-            new StartFrame(new Controller(new UserService(), new LibrarianService(),
-                    new BookService(), new BorrowingService()));
+            new LibrarianFrame(new Controller(new UserService(), new LibrarianService(),
+                    new BookService(), new BorrowingService()), "alice.johnson@example.com");
         });
     }
 }
