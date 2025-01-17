@@ -8,30 +8,39 @@ import library.service.PublisherService;
 
 public class BookMapper {
     public static BookForLibrarianDto toForLibrarianDto(Book book) {
-        long availableCopiesCount = book.getCopies().stream()
-                .map(e -> e.getStatus()
-                        .equalsIgnoreCase("available")).count();
-        return BookForLibrarianDto.builder()
+        BookForLibrarianDto dto = BookForLibrarianDto.builder()
                 .id(book.getId())
                 .title(book.getTitle())
                 .author(book.getAuthor())
                 .publicationYear(book.getPublicationYear())
                 .publisherName(book.getPublisher().getName())
                 .isbn(book.getIsbn())
-                .allCopiesCount((long) book.getCopies().size())
-                .availableCopiesCount(availableCopiesCount).build();
+                .build();
+
+        if (book.getCopies() != null) {
+            long availableCopiesCount = book.getCopies().stream()
+                    .map(e -> e.getStatus()
+                            .equalsIgnoreCase("available")).count();
+            dto.setAllCopiesCount((long) book.getCopies().size());
+            dto.setAvailableCopiesCount(availableCopiesCount);
+        }
+        return dto;
     }
 
     public static Book toBookFromForLibrarianDto(BookForLibrarianDto dto) {
-        PublisherService publisherService = new PublisherService();
+        PublisherService publisherService = new PublisherService("hibernate.cfg.xml");
         Publisher publisher = publisherService.getPublisherByName(dto.getPublisherName());
-        return Book.builder()
+        Book book = Book.builder()
                 .title(dto.getTitle())
                 .author(dto.getAuthor())
                 .publisher(publisher)
                 .publicationYear(dto.getPublicationYear())
                 .isbn(dto.getIsbn())
                 .build();
+        if (dto.getId() != null) {
+            book.setId(dto.getId());
+        }
+        return book;
     }
 
     public static BookForUserDto toForUserDto(Book book) {

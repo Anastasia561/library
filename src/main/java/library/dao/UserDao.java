@@ -1,11 +1,10 @@
 package library.dao;
 
 import jakarta.persistence.NoResultException;
-import library.entity.Publisher;
 import library.entity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -42,9 +41,9 @@ public class UserDao {
 
     public User getByEmail(String email) {
         Session session = sessionFactory.getCurrentSession();
-        NativeQuery<User> query = session
-                .createNativeQuery("select * from \"user\" where email = ?", User.class);
-        query.setParameter(1, email);
+        Query<User> query = session
+                .createQuery("FROM User u WHERE u.email = :email", User.class);
+        query.setParameter("email", email);
         try {
             return query.getSingleResult();
         } catch (NoResultException e) {

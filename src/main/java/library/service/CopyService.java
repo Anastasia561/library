@@ -2,7 +2,6 @@ package library.service;
 
 import library.dao.CopyDao;
 import library.entity.Copy;
-import library.entity.User;
 import library.factory.SessionFactoryProvider;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,8 +14,8 @@ public class CopyService {
     private final CopyDao copyDao;
     private Transaction transaction;
 
-    public CopyService() {
-        sessionFactory = SessionFactoryProvider.getSessionFactory("hibernate.cfg.xml");
+    public CopyService(String conf) {
+        sessionFactory = SessionFactoryProvider.getSessionFactory(conf);
         copyDao = new CopyDao(sessionFactory);
     }
 

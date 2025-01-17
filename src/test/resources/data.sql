@@ -42,4 +42,3 @@ INSERT INTO librarian (employment_date, position, user_id)
 VALUES ('2020-06-01', 'Senior Librarian', 1),
        ('2022-09-15', 'Assistant Librarian', 2),
        ('2023-03-10', 'Library Manager', 3);
-

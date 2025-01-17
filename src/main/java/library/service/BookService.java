@@ -18,8 +18,8 @@ public class BookService {
     private final BookDao bookDao;
     private Transaction transaction;
 
-    public BookService() {
-        sessionFactory = SessionFactoryProvider.getSessionFactory("hibernate.cfg.xml");
+    public BookService(String conf) {
+        sessionFactory = SessionFactoryProvider.getSessionFactory(conf);
         bookDao = new BookDao(sessionFactory);
     }
 

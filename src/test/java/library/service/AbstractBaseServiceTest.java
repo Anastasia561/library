@@ -1,4 +1,4 @@
-package library.dao;
+package library.service;
 
 import library.factory.SessionFactoryProvider;
 import org.hibernate.Session;
@@ -12,26 +12,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public abstract class AbstractBaseTest {
+public class AbstractBaseServiceTest {
     protected SessionFactory sessionFactory;
     protected Session session;
-    protected BookDao bookDao;
-    protected BorrowingDao borrowingDao;
-    protected CopyDao copyDao;
-    protected LibrarianDao librarianDao;
-    protected PublisherDao publisherDao;
-    protected UserDao userDao;
 
     @BeforeEach
     void setup() {
         sessionFactory = SessionFactoryProvider.getSessionFactory("h2.cfg.xml");
-
-        bookDao = new BookDao(sessionFactory);
-        borrowingDao = new BorrowingDao(sessionFactory);
-        copyDao = new CopyDao(sessionFactory);
-        librarianDao = new LibrarianDao(sessionFactory);
-        publisherDao = new PublisherDao(sessionFactory);
-        userDao = new UserDao(sessionFactory);
 
         runSqlScriptFile("src/test/resources/schema.sql");
         runSqlScriptFile("src/test/resources/data.sql");
@@ -41,6 +28,7 @@ public abstract class AbstractBaseTest {
 
     @AfterEach
     void tear() {
+        runSqlScriptFile("src/test/resources/drop.sql");
         session.getTransaction().commit();
         sessionFactory.close();
     }

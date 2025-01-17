@@ -3,7 +3,6 @@ package library.mapper;
 import library.dto.UserForLibrarianDto;
 import library.dto.UserInfoDto;
 import library.entity.User;
-import library.service.LibrarianService;
 
 public class UserMapper {
     public static UserInfoDto toUserInfoDto(User user) {
@@ -33,7 +32,7 @@ public class UserMapper {
     }
 
     public static User toUserFromUserForLibrarianDto(UserForLibrarianDto dto) {
-        LibrarianService librarianService = new LibrarianService();
+        //LibrarianService librarianService = new LibrarianService();
 
         User user = User.builder()
                 .id(dto.getId())

@@ -18,8 +18,8 @@ public class UserService {
     private final UserDao userDao;
     private Transaction transaction;
 
-    public UserService() {
-        sessionFactory = SessionFactoryProvider.getSessionFactory("hibernate.cfg.xml");
+    public UserService(String conf) {
+        sessionFactory = SessionFactoryProvider.getSessionFactory(conf);
         userDao = new UserDao(sessionFactory);
     }
 
@@ -48,7 +48,7 @@ public class UserService {
             transaction = currentSession.beginTransaction();
             User user = userDao.getById(id);
             if (user == null) {
-                throw new RuntimeException("User does not exists");
+                throw new RuntimeException("User does not exist");
             }
             transaction.commit();
             return UserMapper.toUserForLibrarianDto(user);
@@ -64,7 +64,7 @@ public class UserService {
             transaction = currentSession.beginTransaction();
             User user = userDao.getById(id);
             if (user == null) {
-                throw new RuntimeException("User does not exists");
+                throw new RuntimeException("User does not exist");
             }
             transaction.commit();
             return UserMapper.toUserInfoDto(user);
@@ -80,7 +80,7 @@ public class UserService {
             transaction = currentSession.beginTransaction();
             User user = userDao.getByEmail(email);
             if (user == null) {
-                throw new RuntimeException("User does not exists");
+                throw new RuntimeException("User does not exist");
             }
             transaction.commit();
             return UserMapper.toUserForLibrarianDto(user);

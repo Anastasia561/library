@@ -24,11 +24,11 @@ public class BorrowingMapper {
     }
 
     public static Borrowing toBorrowing(BorrowingDto dto) {
-        UserService userService = new UserService();
+        UserService userService = new UserService("hibernate.cfg.xml");
         UserForLibrarianDto userDto = userService.getUserByEmailForLibrarian(dto.getUserEmail());
         User user = UserMapper.toUserFromUserForLibrarianDto(userDto);
 
-        CopyService copyService = new CopyService();
+        CopyService copyService = new CopyService("hibernate.cfg.xml");
         Copy copy = copyService.getCopyByCopyNumber(dto.getCopyNumber());
 
         return Borrowing.builder()

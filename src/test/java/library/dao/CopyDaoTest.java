@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class CopyDaoTest extends AbstractBaseTest {
+public class CopyDaoTest extends AbstractBaseDaoTest {
     @Test
     void saveTest() {
         Copy copy = Copy.builder()

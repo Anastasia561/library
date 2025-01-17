@@ -12,8 +12,11 @@ import javax.swing.*;
 public class Runner {
     public void run() {
         SwingUtilities.invokeLater(() -> {
-            new LibrarianFrame(new Controller(new UserService(), new LibrarianService(),
-                    new BookService(), new BorrowingService()), "alice.johnson@example.com");
+            new LibrarianFrame(new Controller(new UserService("hibernate.cfg.xml"),
+                    new LibrarianService("hibernate.cfg.xml"),
+                    new BookService("hibernate.cfg.xml"),
+                    new BorrowingService("hibernate.cfg.xml")),
+                    "alice.johnson@example.com");
         });
     }
 }

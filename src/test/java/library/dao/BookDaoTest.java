@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class BookDaoTest extends AbstractBaseTest {
+public class BookDaoTest extends AbstractBaseDaoTest {
     @Test
     void getBookByIdTest() {
         String actual = bookDao.getById(1).getIsbn();

@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BorrowingDaoTest extends AbstractBaseTest {
+public class BorrowingDaoTest extends AbstractBaseDaoTest {
     @Test
     void saveTest() {
         Borrowing borrowing = Borrowing.builder()

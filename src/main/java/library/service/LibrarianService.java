@@ -15,8 +15,8 @@ public class LibrarianService {
     private final LibrarianDao librarianDao;
     private Transaction transaction;
 
-    public LibrarianService() {
-        sessionFactory = SessionFactoryProvider.getSessionFactory("hibernate.cfg.xml");
+    public LibrarianService(String conf) {
+        sessionFactory = SessionFactoryProvider.getSessionFactory(conf);
         librarianDao = new LibrarianDao(sessionFactory);
     }
 
@@ -72,7 +72,11 @@ public class LibrarianService {
         try {
             Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
-            librarianDao.update(librarian);
+            if (librarian.getEmploymentDate().isAfter(LocalDate.now())) {
+                throw new RuntimeException("Employment date is in the future");
+            } else {
+                librarianDao.update(librarian);
+            }
             transaction.commit();
         } catch (RuntimeException e) {
             if (transaction != null) transaction.rollback();

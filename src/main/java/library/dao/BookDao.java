@@ -2,8 +2,6 @@ package library.dao;
 
 import jakarta.persistence.NoResultException;
 import library.entity.Book;
-import library.entity.User;
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.NativeQuery;
@@ -23,12 +21,7 @@ public class BookDao {
 
     public Book getById(Integer id) {
         Session session = sessionFactory.getCurrentSession();
-//        return session.get(Book.class, id);
-        Book book = session.get(Book.class, id);
-        if (book != null) {
-            Hibernate.initialize(book.getCopies());
-        }
-        return book;
+        return session.get(Book.class, id);
     }
 
     public List<Book> findAll() {

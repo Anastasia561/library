@@ -14,8 +14,8 @@ public class PublisherService {
     private final PublisherDao publisherDao;
     Transaction transaction;
 
-    public PublisherService() {
-        sessionFactory = SessionFactoryProvider.getSessionFactory("hibernate.cfg.xml");
+    public PublisherService(String conf) {
+        sessionFactory = SessionFactoryProvider.getSessionFactory(conf);
         publisherDao = new PublisherDao(sessionFactory);
     }
 

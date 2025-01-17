@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 public class Validator {
     private static final Pattern ISBN_PATTERN = Pattern.compile
-            ("^\\d{13}$ ");
+            ("^\\d{13}$");
     private static final Pattern EMAIL_PATTERN = Pattern.compile
             ("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
 
