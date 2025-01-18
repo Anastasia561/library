@@ -5,18 +5,19 @@ import library.service.BookService;
 import library.service.BorrowingService;
 import library.service.LibrarianService;
 import library.service.UserService;
-import library.view.frame.main.LibrarianFrame;
+import library.view.frame.main.StartFrame;
 
 import javax.swing.*;
 
 public class Runner {
+    private static final String CONF = "hibernate.cfg.xml";
+
     public void run() {
         SwingUtilities.invokeLater(() -> {
-            new LibrarianFrame(new Controller(new UserService("hibernate.cfg.xml"),
-                    new LibrarianService("hibernate.cfg.xml"),
-                    new BookService("hibernate.cfg.xml"),
-                    new BorrowingService("hibernate.cfg.xml")),
-                    "alice.johnson@example.com");
+            new StartFrame(new Controller(UserService.getInstance(CONF),
+                    LibrarianService.getInstance(CONF),
+                    BookService.getInstance(CONF),
+                    BorrowingService.getInstance(CONF)));
         });
     }
 }

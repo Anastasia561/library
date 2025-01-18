@@ -13,10 +13,18 @@ public class PublisherService {
     private final SessionFactory sessionFactory;
     private final PublisherDao publisherDao;
     Transaction transaction;
+    private static PublisherService instance;
 
-    public PublisherService(String conf) {
+    private PublisherService(String conf) {
         sessionFactory = SessionFactoryProvider.getSessionFactory(conf);
         publisherDao = new PublisherDao(sessionFactory);
+    }
+
+    public static PublisherService getInstance(String config) {
+        if (instance == null) {
+            instance = new PublisherService(config);
+        }
+        return instance;
     }
 
     public void createPublisher(Publisher publisher) {

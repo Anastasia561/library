@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BookServiceTest extends AbstractBaseServiceTest {
-    private final BookService bookService = new BookService("h2.cfg.xml");
+    private final BookService bookService = BookService.getInstance("h2.cfg.xml");
 
     @Test
     void createBookTest() {

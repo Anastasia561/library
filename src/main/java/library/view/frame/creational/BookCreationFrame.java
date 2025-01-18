@@ -48,11 +48,17 @@ public class BookCreationFrame extends JFrame {
         formPanel.add(publisherField);
 
         formPanel.add(new JLabel("Publication Year:"));
-        JTextField yearField = (isModification ? new JTextField(dto.getPublicationYear()) : new JTextField());
+        JTextField yearField = (isModification ? new JTextField("" + dto.getPublicationYear()) : new JTextField());
         formPanel.add(yearField);
 
         formPanel.add(new JLabel("Isbn:"));
-        JTextField isbnField = (isModification ? new JTextField(dto.getIsbn()) : new JTextField());
+        JTextField isbnField;
+        if (isModification) {
+            isbnField = new JTextField(dto.getIsbn());
+            isbnField.setEditable(false);
+        } else {
+            isbnField = new JTextField();
+        }
         formPanel.add(isbnField);
 
         formPanel.add(new JLabel("All copies count:"));
@@ -97,7 +103,12 @@ public class BookCreationFrame extends JFrame {
                             .allCopiesCount(allCopiesCount)
                             .availableCopiesCount(avalCopiesCount)
                             .build();
-                    controller.createBook(dto);
+                    if (isModification) {
+                        controller.updateBook(dto);
+                    } else {
+                        controller.createBook(dto);
+                    }
+
                     titleField.setText("");
                     authorField.setText("");
                     publisherField.setText("");

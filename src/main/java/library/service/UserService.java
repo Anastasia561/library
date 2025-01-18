@@ -17,10 +17,18 @@ public class UserService {
     private final SessionFactory sessionFactory;
     private final UserDao userDao;
     private Transaction transaction;
+    private static UserService instance;
 
-    public UserService(String conf) {
+    private UserService(String conf) {
         sessionFactory = SessionFactoryProvider.getSessionFactory(conf);
         userDao = new UserDao(sessionFactory);
+    }
+
+    public static UserService getInstance(String config) {
+        if (instance == null) {
+            instance = new UserService(config);
+        }
+        return instance;
     }
 
     public void createUser(UserForLibrarianDto dto) {
@@ -28,7 +36,7 @@ public class UserService {
             Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
 
-            User user = UserMapper.toUserFromUserForLibrarianDto(dto);
+            User user = UserMapper.toUserFromUserForLibrarianDto(dto, true);
             Validator.validate(user);
             if (userDao.getByEmail(dto.getEmail()) == null) {
                 userDao.save(user);
@@ -95,7 +103,7 @@ public class UserService {
             Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
 
-            User user = UserMapper.toUserFromUserForLibrarianDto(dto);
+            User user = UserMapper.toUserFromUserForLibrarianDto(dto, true);
             Validator.validate(user);
             userDao.update(user);
             transaction.commit();

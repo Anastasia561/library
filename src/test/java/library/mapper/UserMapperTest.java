@@ -84,7 +84,7 @@ public class UserMapperTest extends AbstractBaseDaoTest {
                 .isLibrarian(true)
                 .build();
 
-        User user = UserMapper.toUserFromUserForLibrarianDto(dto);
+        User user = UserMapper.toUserFromUserForLibrarianDto(dto, true);
 
         assertAll(
                 () -> assertEquals(1, user.getId()),

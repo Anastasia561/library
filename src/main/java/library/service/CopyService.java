@@ -13,10 +13,18 @@ public class CopyService {
     private final SessionFactory sessionFactory;
     private final CopyDao copyDao;
     private Transaction transaction;
+    private static CopyService instance;
 
-    public CopyService(String conf) {
+    private CopyService(String conf) {
         sessionFactory = SessionFactoryProvider.getSessionFactory(conf);
         copyDao = new CopyDao(sessionFactory);
+    }
+
+    public static CopyService getInstance(String config) {
+        if (instance == null) {
+            instance = new CopyService(config);
+        }
+        return instance;
     }
 
     public void createCopy(Copy copy) {

@@ -43,9 +43,4 @@ public class BookForLibrarianTableModel extends AbstractTableModel {
             default -> null;
         };
     }
-
-    public void addBooks(List<BookForLibrarianDto> books) {
-        this.books = books;
-        fireTableDataChanged();
-    }
 }

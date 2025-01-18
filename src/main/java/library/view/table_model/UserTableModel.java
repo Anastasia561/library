@@ -40,9 +40,4 @@ public class UserTableModel extends AbstractTableModel {
             default -> null;
         };
     }
-
-    public void addUsers(List<UserForLibrarianDto> users) {
-        this.users = users;
-        fireTableDataChanged();
-    }
 }

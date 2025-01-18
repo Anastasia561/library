@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CopyServiceTest extends AbstractBaseServiceTest {
-    private final CopyService copyService = new CopyService("h2.cfg.xml");
-    private final BookService bookService = new BookService("h2.cfg.xml");
+    private final CopyService copyService = CopyService.getInstance("h2.cfg.xml");
+    private final BookService bookService = BookService.getInstance("h2.cfg.xml");
 
     @Test
     void createCopyTest() {

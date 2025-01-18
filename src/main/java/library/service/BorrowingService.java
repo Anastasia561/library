@@ -15,13 +15,27 @@ public class BorrowingService {
     private final SessionFactory sessionFactory;
     private final BorrowingDao borrowingDao;
     private Transaction transaction;
+    private static BorrowingService instance;
 
-    public BorrowingService(String conf) {
+    private final String conf;
+
+    private BorrowingService(String conf) {
         sessionFactory = SessionFactoryProvider.getSessionFactory(conf);
         borrowingDao = new BorrowingDao(sessionFactory);
+        this.conf = conf;
+    }
+
+    public static BorrowingService getInstance(String config) {
+        if (instance == null) {
+            instance = new BorrowingService(config);
+        }
+        return instance;
     }
 
     public void createBorrowing(BorrowingDto dto) {
+        if (dto.getReturnDate() != null && dto.getReturnDate().isBefore(dto.getBorrowDate())) {
+            throw new RuntimeException("Return date is before borrowing date");
+        }
         try {
             Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();
@@ -51,6 +65,9 @@ public class BorrowingService {
     }
 
     public void updateBorrowing(BorrowingDto dto) {
+        if (dto.getReturnDate() != null && dto.getReturnDate().isBefore(dto.getBorrowDate())) {
+            throw new RuntimeException("Return date is before borrowing date");
+        }
         try {
             Session currentSession = sessionFactory.getCurrentSession();
             transaction = currentSession.beginTransaction();

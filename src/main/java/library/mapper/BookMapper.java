@@ -28,7 +28,7 @@ public class BookMapper {
     }
 
     public static Book toBookFromForLibrarianDto(BookForLibrarianDto dto) {
-        PublisherService publisherService = new PublisherService("hibernate.cfg.xml");
+        PublisherService publisherService = PublisherService.getInstance("hibernate.cfg.xml");
         Publisher publisher = publisherService.getPublisherByName(dto.getPublisherName());
         Book book = Book.builder()
                 .title(dto.getTitle())

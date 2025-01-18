@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PublisherServiceTest extends AbstractBaseServiceTest {
-    private final PublisherService publisherService = new PublisherService("h2.cfg.xml");
+    private final PublisherService publisherService = PublisherService.getInstance("h2.cfg.xml");
 
     @Test
     void createPublisherTest() {
@@ -63,12 +63,12 @@ public class PublisherServiceTest extends AbstractBaseServiceTest {
     @Test
     void updatePublisherTest() {
         Publisher publisher = publisherService.getPublisherById(1);
-        publisher.setName("Test");
+        publisher.setAddress("125 Penguin St, New York");
         publisherService.updatePublisher(publisher);
         Publisher updatedP = publisherService.getPublisherById(1);
         assertAll(
-                () -> assertEquals("Test", updatedP.getName()),
-                () -> assertEquals("123 Penguin St, New York", updatedP.getAddress()),
+                () -> assertEquals("Penguin Books", updatedP.getName()),
+                () -> assertEquals("125 Penguin St, New York", updatedP.getAddress()),
                 () -> assertEquals("123-456-7890", updatedP.getPhoneNumber())
         );
     }

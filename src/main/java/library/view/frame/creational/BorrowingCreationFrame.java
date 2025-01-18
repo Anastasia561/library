@@ -51,7 +51,7 @@ public class BorrowingCreationFrame extends JFrame {
         formPanel.add(userEmailField);
 
         formPanel.add(new JLabel("Copy number:"));
-        JTextField copyNumberField = (isModification ? new JTextField(dto.getCopyNumber()) : new JTextField());
+        JTextField copyNumberField = (isModification ? new JTextField("" + dto.getCopyNumber()) : new JTextField());
         formPanel.add(copyNumberField);
 
         formPanel.add(new JLabel("Book title:"));
@@ -72,6 +72,12 @@ public class BorrowingCreationFrame extends JFrame {
         properties1.put("text.month", "Month");
         properties1.put("text.year", "Year");
         JDatePanelImpl borrowDatePanel = new JDatePanelImpl(model1, properties1);
+        if (isModification) {
+            borrowDatePanel.getModel().setDate(dto.getBorrowDate().getYear(),
+                    dto.getBorrowDate().getMonthValue() - 1,
+                    dto.getBorrowDate().getDayOfMonth());
+            borrowDatePanel.getModel().setSelected(true);
+        }
         JDatePickerImpl borrowDatePicker = new JDatePickerImpl(borrowDatePanel, new DateLabelFormatter());
         formPanel.add(new JLabel("Borrow date:"));
         formPanel.add(borrowDatePicker);
@@ -82,6 +88,12 @@ public class BorrowingCreationFrame extends JFrame {
         properties2.put("text.month", "Month");
         properties2.put("text.year", "Year");
         JDatePanelImpl returnDatePanel = new JDatePanelImpl(model2, properties2);
+        if (isModification && dto.getReturnDate() != null) {
+            returnDatePanel.getModel().setDate(dto.getReturnDate().getYear(),
+                    dto.getReturnDate().getMonthValue() - 1,
+                    dto.getReturnDate().getDayOfMonth());
+            returnDatePanel.getModel().setSelected(true);
+        }
         JDatePickerImpl returnDatePicker = new JDatePickerImpl(returnDatePanel, new DateLabelFormatter());
         formPanel.add(new JLabel("Return date:"));
         formPanel.add(returnDatePicker);
@@ -120,6 +132,7 @@ public class BorrowingCreationFrame extends JFrame {
             } else {
                 try {
                     BorrowingDto dto = BorrowingDto.builder()
+                            .id(id)
                             .userName(userName)
                             .userEmail(userEmail)
                             .copyNumber(copyNumber)
@@ -129,8 +142,12 @@ public class BorrowingCreationFrame extends JFrame {
                             .borrowDate(borrowDate)
                             .returnDate(returnDate)
                             .build();
+                    if (isModification) {
+                        controller.updateBorrowing(dto);
+                    } else {
+                        controller.createBorrowing(dto);
+                    }
 
-                    controller.createBorrowing(dto);
                     userNameField.setText("");
                     userEmailField.setText("");
                     copyNumberField.setText("");

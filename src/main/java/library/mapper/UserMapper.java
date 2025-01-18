@@ -18,7 +18,7 @@ public class UserMapper {
 
     public static UserForLibrarianDto toUserForLibrarianDto(User user) {
         Boolean isLibrarian = (user.getLibrarian() != null);
-        return UserForLibrarianDto.builder()
+        UserForLibrarianDto dto = UserForLibrarianDto.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
@@ -29,9 +29,11 @@ public class UserMapper {
                         .map(BorrowingMapper::toBorrowingDto).toList())
                 .isLibrarian(isLibrarian)
                 .build();
+        return dto;
     }
 
-    public static User toUserFromUserForLibrarianDto(UserForLibrarianDto dto) {
+
+    public static User toUserFromUserForLibrarianDto(UserForLibrarianDto dto, boolean includeBorrowings) {
         User user = User.builder()
                 .id(dto.getId())
                 .name(dto.getName())
@@ -40,11 +42,13 @@ public class UserMapper {
                 .address(dto.getAddress())
                 .build();
 
-        if (dto.getBorrowings() != null) {
-            user.setBorrowings((dto.getBorrowings()
+        if (includeBorrowings && dto.getBorrowings() != null) {
+            user.setBorrowings(dto.getBorrowings()
                     .stream()
-                    .map(BorrowingMapper::toBorrowing).toList()));
+                    .map(BorrowingMapper::toBorrowing)
+                    .toList());
         }
+
         return user;
     }
 }

@@ -52,9 +52,4 @@ public class BorrowingForLibrarianTableModel extends AbstractTableModel {
             default -> null;
         };
     }
-
-    public void addBorrowings(List<BorrowingDto> borrowings) {
-        this.borrowings = borrowings;
-        fireTableDataChanged();
-    }
 }

@@ -17,10 +17,18 @@ public class BookService {
     private final SessionFactory sessionFactory;
     private final BookDao bookDao;
     private Transaction transaction;
+    private static BookService instance;
 
-    public BookService(String conf) {
+    private BookService(String conf) {
         sessionFactory = SessionFactoryProvider.getSessionFactory(conf);
         bookDao = new BookDao(sessionFactory);
+    }
+
+    public static BookService getInstance(String config) {
+        if (instance == null) {
+            instance = new BookService(config);
+        }
+        return instance;
     }
 
     public void createBook(BookForLibrarianDto dto) {

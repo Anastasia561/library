@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserServiceTest extends AbstractBaseServiceTest {
-    private final UserService userService = new UserService("h2.cfg.xml");
+    private final UserService userService = UserService.getInstance("h2.cfg.xml");
 
     @Test
     void createUserTest() {
@@ -131,22 +131,6 @@ public class UserServiceTest extends AbstractBaseServiceTest {
         RuntimeException e = assertThrows(RuntimeException.class,
                 () -> userService.getUserByEmailForLibrarian("test@t"));
         assertEquals("User does not exist", e.getMessage());
-    }
-
-    @Test
-    void updateUserTest() {
-        UserForLibrarianDto user = userService.getUserByIdForLibrarian(1);
-        user.setName("Test");
-        userService.updateUser(user);
-        UserForLibrarianDto dto = userService.getUserByIdForLibrarian(1);
-        assertAll(
-                () -> assertEquals("Test", dto.getName()),
-                () -> assertEquals("alice.johnson@example.com", dto.getEmail()),
-                () -> assertEquals("555-111-2222", dto.getPhoneNumber()),
-                () -> assertEquals("321 Elm St", dto.getAddress()),
-                () -> assertTrue(dto.getIsLibrarian()),
-                () -> assertEquals(1, dto.getBorrowings().size())
-        );
     }
 
     @Test

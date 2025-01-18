@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BorrowingServiceTest extends AbstractBaseServiceTest {
-    private final BorrowingService borrowingService = new BorrowingService("h2.cfg.xml");
+    private final BorrowingService borrowingService = BorrowingService.getInstance("h2.cfg.xml");
 
     @Test
     void createBorrowingTest() {
@@ -27,6 +27,38 @@ public class BorrowingServiceTest extends AbstractBaseServiceTest {
         int actual = borrowingService.getAll().size();
         int expected = 4;
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void createBorrowingTestShouldThrowDateException() {
+        BorrowingDto dto = BorrowingDto.builder()
+                .userName("Alice Johnson")
+                .userEmail("alice.johnson@example.com")
+                .copyNumber(1)
+                .bookTitle("The Great Gatsby")
+                .author("F. Scott Fitzgerald")
+                .isbn("9780743273565")
+                .borrowDate(LocalDate.now())
+                .returnDate(LocalDate.now().minusYears(2))
+                .build();
+        RuntimeException e = assertThrows(RuntimeException.class,
+                () -> borrowingService.createBorrowing(dto));
+
+        int actual = borrowingService.getAll().size();
+        int expected = 3;
+        assertAll(
+                () -> assertEquals("Return date is before borrowing date", e.getMessage()),
+                () -> assertEquals(expected, actual)
+        );
+    }
+
+    @Test
+    void updateBorrowingTestShouldThrowDateException() {
+        BorrowingDto dto = borrowingService.getBorrowingById(1);
+        dto.setReturnDate(dto.getReturnDate().minusYears(2));
+        RuntimeException e = assertThrows(RuntimeException.class,
+                () -> borrowingService.updateBorrowing(dto));
+        assertEquals("Return date is before borrowing date", e.getMessage());
     }
 
     @Test

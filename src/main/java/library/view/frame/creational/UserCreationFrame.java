@@ -2,6 +2,7 @@ package library.view.frame.creational;
 
 import library.controller.Controller;
 import library.dto.UserForLibrarianDto;
+import library.entity.Librarian;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -54,7 +55,13 @@ public class UserCreationFrame extends JFrame {
         formPanel.add(nameField);
 
         formPanel.add(new JLabel("Email:"));
-        JTextField emailField = (isModification ? new JTextField(dto.getEmail()) : new JTextField());
+        JTextField emailField;
+        if (isModification) {
+            emailField = new JTextField(dto.getEmail());
+            emailField.setEditable(false);
+        } else {
+            emailField = new JTextField();
+        }
         formPanel.add(emailField);
 
         formPanel.add(new JLabel("Phone Number:"));
@@ -67,9 +74,13 @@ public class UserCreationFrame extends JFrame {
 
         JTextField positionField;
         JDatePickerImpl datePicker;
+        Librarian librarian = null;
         if (isLibrarian) {
+            if (isModification) {
+                librarian = controller.getLibrarianByEmail(email);
+            }
             formPanel.add(new JLabel("Position"));
-            positionField = new JTextField();
+            positionField = (isModification ? new JTextField(librarian.getPosition()) : new JTextField());
             formPanel.add(positionField);
 
             UtilDateModel model = new UtilDateModel();
@@ -78,6 +89,12 @@ public class UserCreationFrame extends JFrame {
             properties.put("text.month", "Month");
             properties.put("text.year", "Year");
             JDatePanelImpl datePanel = new JDatePanelImpl(model, properties);
+            if (isModification) {
+                datePanel.getModel().setDate(librarian.getEmploymentDate().getYear(),
+                        librarian.getEmploymentDate().getMonthValue() - 1,
+                        librarian.getEmploymentDate().getDayOfMonth());
+                datePanel.getModel().setSelected(true);
+            }
             datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
             formPanel.add(new JLabel("Employment date:"));
             formPanel.add(datePicker);
@@ -86,7 +103,6 @@ public class UserCreationFrame extends JFrame {
             datePicker = null;
 
         }
-
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         JButton saveButton = new JButton("Save");
@@ -112,13 +128,27 @@ public class UserCreationFrame extends JFrame {
                 JOptionPane.showMessageDialog(this, "Please fill all fields");
             } else {
                 try {
-                    if (isLibrarian) {
-                        controller.createLibrarian(name, email, phoneNumber, address,
-                                date, position);
-                        //System.out.println(date);
+                    UserForLibrarianDto dto = UserForLibrarianDto.builder()
+                            .name(name)
+                            .email(email)
+                            .phoneNumber(phoneNumber)
+                            .address(address)
+                            .isLibrarian(isLibrarian)
+                            .build();
+                    if (isModification) {
+                        if (isLibrarian) {
+                            controller.updateLibrarian(dto, position, date);
+                        } else {
+                            controller.updateUser(dto);
+                        }
                     } else {
-                        controller.createUser(name, email, phoneNumber, address, false);
+                        if (isLibrarian) {
+                            controller.createLibrarian(dto, date, position);
+                        } else {
+                            controller.createUser(dto);
+                        }
                     }
+
                     nameField.setText("");
                     emailField.setText("");
                     phoneField.setText("");

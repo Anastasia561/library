@@ -14,10 +14,18 @@ public class LibrarianService {
     private final SessionFactory sessionFactory;
     private final LibrarianDao librarianDao;
     private Transaction transaction;
+    private static LibrarianService instance;
 
-    public LibrarianService(String conf) {
+    private LibrarianService(String conf) {
         sessionFactory = SessionFactoryProvider.getSessionFactory(conf);
         librarianDao = new LibrarianDao(sessionFactory);
+    }
+
+    public static LibrarianService getInstance(String config) {
+        if (instance == null) {
+            instance = new LibrarianService(config);
+        }
+        return instance;
     }
 
     public void createLibrarian(Librarian librarian) {

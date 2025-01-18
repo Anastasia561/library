@@ -30,34 +30,29 @@ public class Controller {
 
     }
 
-    public void createUser(String name, String email, String phoneNumber,
-                           String address, Boolean isLibrarian) {
-        UserForLibrarianDto dto = UserForLibrarianDto.builder()
-                .name(name)
-                .email(email)
-                .phoneNumber(phoneNumber)
-                .address(address)
-                .isLibrarian(isLibrarian)
-                .build();
+    public void createUser(UserForLibrarianDto dto) {
         userService.createUser(dto);
     }
 
-    public void createLibrarian(String name, String email, String phoneNumber,
-                                String address, LocalDate employmentDate, String position) {
-        createUser(name, email, phoneNumber, address, true);
+    public void createLibrarian(UserForLibrarianDto dto, LocalDate employmentDate, String position) {
+        if (employmentDate.isAfter(LocalDate.now())) {
+            throw new RuntimeException("Employment date is in the future");
+        } else {
+            createUser(dto);
 
-        UserForLibrarianDto dto = userService.getUserByEmailForLibrarian(email);
-        User user = UserMapper.toUserFromUserForLibrarianDto(dto);
+            UserForLibrarianDto userDto = userService.getUserByEmailForLibrarian(dto.getEmail());
+            User user = UserMapper.toUserFromUserForLibrarianDto(userDto, true);
 
-        Librarian librarian = Librarian.builder()
-                .employmentDate(employmentDate)
-                .position(position)
-                .user(user)
-                .build();
+            Librarian librarian = Librarian.builder()
+                    .employmentDate(employmentDate)
+                    .position(position)
+                    .user(user)
+                    .build();
 
-        librarianService.createLibrarian(librarian);
-        dto.setIsLibrarian(true);
-        userService.updateUser(dto);
+            librarianService.createLibrarian(librarian);
+            user.setLibrarian(librarian);
+            userService.updateUser(UserMapper.toUserForLibrarianDto(user));
+        }
     }
 
     public List<UserForLibrarianDto> getAllUserDto() {
@@ -78,10 +73,8 @@ public class Controller {
         Boolean isLibrarian = dto.getIsLibrarian();
         if (isLibrarian) {
             Librarian librarian = librarianService.getLibrarianByEmail(email);
-//            librarianService.deleteLibrarianById(librarian.getId());
             librarian = librarianService.getLibrarianById(librarian.getId());
             librarianService.deleteLibrarianById(librarian.getId());
-            //throw new RuntimeException("Not allowed to delete librarians");
         }
         userService.deleteUserById(id);
     }
@@ -118,10 +111,22 @@ public class Controller {
     }
 
     public void updateUser(UserForLibrarianDto dto) {
+        UserForLibrarianDto dto2 = userService.getUserByEmailForLibrarian(dto.getEmail());
+        dto.setId(dto2.getId());
         userService.updateUser(dto);
     }
 
+    public void updateLibrarian(UserForLibrarianDto dto, String position, LocalDate empDate) {
+        updateUser(dto);
+        Librarian librarian = getLibrarianByEmail(dto.getEmail());
+        librarian.setPosition(position);
+        librarian.setEmploymentDate(empDate);
+        librarianService.updateLibrarian(librarian);
+    }
+
     public void updateBook(BookForLibrarianDto dto) {
+        BookForLibrarianDto bookDto = bookService.getBookByIsbnForLibrarian(dto.getIsbn());
+        dto.setId(bookDto.getId());
         bookService.updateBook(dto);
     }
 
@@ -147,5 +152,9 @@ public class Controller {
 
     public BorrowingDto getBorrowingDtoById(Integer id) {
         return borrowingService.getBorrowingById(id);
+    }
+
+    public Librarian getLibrarianByEmail(String email) {
+        return librarianService.getLibrarianByEmail(email);
     }
 }

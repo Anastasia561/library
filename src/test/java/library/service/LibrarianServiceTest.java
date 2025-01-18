@@ -13,8 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class LibrarianServiceTest extends AbstractBaseServiceTest {
-    private final LibrarianService librarianService = new LibrarianService("h2.cfg.xml");
-    private final UserService userService = new UserService("h2.cfg.xml");
+    private final LibrarianService librarianService = LibrarianService.getInstance("h2.cfg.xml");
+    private final UserService userService = UserService.getInstance("h2.cfg.xml");
 
     @Test
     void createLibrarianTestShouldThrowDateException() {
@@ -27,7 +27,7 @@ public class LibrarianServiceTest extends AbstractBaseServiceTest {
                 .build();
         userService.createUser(userDto);
         User user = UserMapper.toUserFromUserForLibrarianDto(
-                userService.getUserByEmailForLibrarian("test@test"));
+                userService.getUserByEmailForLibrarian("test@test"), true);
         Librarian librarian = Librarian.builder()
                 .user(user)
                 .employmentDate(LocalDate.of(2027, 2, 1))
@@ -35,7 +35,13 @@ public class LibrarianServiceTest extends AbstractBaseServiceTest {
                 .build();
         RuntimeException e = assertThrows(RuntimeException.class,
                 () -> librarianService.createLibrarian(librarian));
-        assertEquals("Employment date is in the future", e.getMessage());
+
+        int actual = librarianService.getAll().size();
+        int expected = 3;
+        assertAll(
+                () -> assertEquals(expected, actual),
+                () -> assertEquals("Employment date is in the future", e.getMessage())
+        );
     }
 
     @Test
@@ -49,7 +55,7 @@ public class LibrarianServiceTest extends AbstractBaseServiceTest {
                 .build();
         userService.createUser(userDto);
         User user = UserMapper.toUserFromUserForLibrarianDto(
-                userService.getUserByEmailForLibrarian("test@test"));
+                userService.getUserByEmailForLibrarian("test@test"), true);
         Librarian librarian = Librarian.builder()
                 .user(user)
                 .employmentDate(LocalDate.of(2024, 2, 1))
@@ -150,7 +156,7 @@ public class LibrarianServiceTest extends AbstractBaseServiceTest {
                 .build();
         userService.createUser(userDto);
         User user = UserMapper.toUserFromUserForLibrarianDto(
-                userService.getUserByEmailForLibrarian("test@test"));
+                userService.getUserByEmailForLibrarian("test@test"), true);
         Librarian librarian = Librarian.builder()
                 .user(user)
                 .employmentDate(LocalDate.of(2024, 2, 1))
