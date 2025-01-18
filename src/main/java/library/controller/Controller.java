@@ -68,7 +68,7 @@ public class Controller {
         return bookService.getAllForLibrarian();
     }
 
-    public List<BorrowingDto> getAllBorrowing() {
+    public List<BorrowingDto> getAllBorrowingDto() {
         return borrowingService.getAll();
     }
 
@@ -115,5 +115,37 @@ public class Controller {
 
     public void deleteBorrowingById(Integer id) {
         borrowingService.deleteBorrowingById(id);
+    }
+
+    public void updateUser(UserForLibrarianDto dto) {
+        userService.updateUser(dto);
+    }
+
+    public void updateBook(BookForLibrarianDto dto) {
+        bookService.updateBook(dto);
+    }
+
+    public void updateBorrowing(BorrowingDto dto) {
+        borrowingService.updateBorrowing(dto);
+    }
+
+    public void createBook(BookForLibrarianDto dto) {
+        bookService.createBook(dto);
+    }
+
+    public void createBorrowing(BorrowingDto dto) {
+        borrowingService.createBorrowing(dto);
+    }
+
+    public BookForLibrarianDto getBookForLibrarianDtoByIsbn(String isbn) {
+        return bookService.getBookByIsbnForLibrarian(isbn);
+    }
+
+    public UserForLibrarianDto getUserForLibrarianDtoByEmail(String email) {
+        return userService.getUserByEmailForLibrarian(email);
+    }
+
+    public BorrowingDto getBorrowingDtoById(Integer id) {
+        return borrowingService.getBorrowingById(id);
     }
 }

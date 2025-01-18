@@ -1,6 +1,7 @@
 package library.view.frame.creational;
 
 import library.controller.Controller;
+import library.dto.UserForLibrarianDto;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -15,18 +16,29 @@ import java.util.Properties;
 public class UserCreationFrame extends JFrame {
     private final Controller controller;
     private final Boolean isLibrarian;
+    private final Boolean isModification;
+    private final String email;
+    private UserForLibrarianDto dto = null;
 
-    public UserCreationFrame(Controller controller, Boolean isLibrarian) {
+    public UserCreationFrame(Controller controller, Boolean isLibrarian,
+                             Boolean isModification, String email) {
         this.controller = controller;
         this.isLibrarian = isLibrarian;
+        this.isModification = isModification;
+        this.email = email;
         create();
     }
 
     private void create() {
-        if (isLibrarian) {
-            setTitle("Create new librarian");
+        if (isModification) {
+            setTitle("Modify user");
+            dto = controller.getUserForLibrarianDtoByEmail(email);
         } else {
-            setTitle("Create new user");
+            if (isLibrarian) {
+                setTitle("Create new librarian");
+            } else {
+                setTitle("Create new user");
+            }
         }
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -38,19 +50,19 @@ public class UserCreationFrame extends JFrame {
         formPanel.setLayout(new GridLayout(6, 2, 5, 10));
 
         formPanel.add(new JLabel("Name:"));
-        JTextField nameField = new JTextField();
+        JTextField nameField = (isModification ? new JTextField(dto.getName()) : new JTextField());
         formPanel.add(nameField);
 
         formPanel.add(new JLabel("Email:"));
-        JTextField emailField = new JTextField();
+        JTextField emailField = (isModification ? new JTextField(dto.getEmail()) : new JTextField());
         formPanel.add(emailField);
 
         formPanel.add(new JLabel("Phone Number:"));
-        JTextField phoneField = new JTextField();
+        JTextField phoneField = (isModification ? new JTextField(dto.getPhoneNumber()) : new JTextField());
         formPanel.add(phoneField);
 
         formPanel.add(new JLabel("Address:"));
-        JTextField addressField = new JTextField();
+        JTextField addressField = (isModification ? new JTextField(dto.getAddress()) : new JTextField());
         formPanel.add(addressField);
 
         JTextField positionField;
@@ -119,6 +131,7 @@ public class UserCreationFrame extends JFrame {
                     JOptionPane.showMessageDialog(this, a.getMessage());
                 }
             }
+
         });
 
         buttonPanel.add(saveButton);

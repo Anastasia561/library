@@ -32,8 +32,6 @@ public class UserMapper {
     }
 
     public static User toUserFromUserForLibrarianDto(UserForLibrarianDto dto) {
-        //LibrarianService librarianService = new LibrarianService();
-
         User user = User.builder()
                 .id(dto.getId())
                 .name(dto.getName())
