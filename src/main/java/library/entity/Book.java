@@ -21,6 +21,33 @@ import lombok.ToString;
 
 import java.util.List;
 
+/**
+ * Represents a book entity in the library system.
+ * This class is mapped to the "book" table in the database.
+ * It contains information about the book such as its title, author, publisher, publication year, ISBN,
+ * and its associated copies. It also provides constraints and behaviors specific to the Book entity.
+ * <p>
+ * Annotations:
+ * - {@code @Getter}, {@code @Setter}: Auto-generates getter and setter methods for the fields.
+ * - {@code @ToString}: Generates a string representation of the object, excluding the "copies" field to avoid potential recursive loops.
+ * - {@code @Builder}: Enables the builder pattern for constructing Book objects.
+ * - {@code @NoArgsConstructor}, {@code @AllArgsConstructor}: Provides constructors with no arguments and all arguments, respectively.
+ * - {@code @Entity}, {@code @Table(name = "book")}: Maps this class to a database table named "book".
+ * <p>
+ * Relationships:
+ * - {@code @ManyToOne}: A Book is associated with a Publisher.
+ * - {@code @OneToMany}: A Book can have multiple associated copies.
+ * <p>
+ * Constraints:
+ * - The "title" and "author" fields are mandatory (not nullable).
+ * - The "isbn" field is mandatory, must be unique, and follows a valid ISBN format.
+ * - The "publisher_id" foreign key references the Publisher table and is mandatory.
+ * - The "publication_year" field is mandatory.
+ * <p>
+ * Lifecycle Callbacks:
+ * - {@code @PreRemove}: Ensures that a Book cannot be deleted if it has associated copies.
+ * <p>
+ */
 @Getter
 @Setter
 @ToString

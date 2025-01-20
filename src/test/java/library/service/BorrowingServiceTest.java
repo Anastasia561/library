@@ -1,5 +1,6 @@
 package library.service;
 
+import library.dao.AbstractBaseTest;
 import library.dto.BorrowingDto;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class BorrowingServiceTest extends AbstractBaseServiceTest {
+public class BorrowingServiceTest extends AbstractBaseTest {
     private final BorrowingService borrowingService = BorrowingService.getInstance("h2.cfg.xml");
 
     @Test

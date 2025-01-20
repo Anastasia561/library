@@ -1,8 +1,8 @@
 package library.controller;
 
+import library.dao.AbstractBaseTest;
 import library.dto.UserForLibrarianDto;
 import library.entity.Librarian;
-import library.service.AbstractBaseServiceTest;
 import library.service.BookService;
 import library.service.BorrowingService;
 import library.service.LibrarianService;
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ControllerTest extends AbstractBaseServiceTest {
+public class ControllerTest extends AbstractBaseTest {
     private final static String CONF = "h2.cfg.xml";
     private final Controller controller = new Controller(UserService.getInstance(CONF),
             LibrarianService.getInstance(CONF),
@@ -74,7 +74,7 @@ public class ControllerTest extends AbstractBaseServiceTest {
                 .isLibrarian(true)
                 .build();
 
-        controller.createLibrarian(dto, LocalDate.now(), "test pos");
+        controller.createLibrarian(dto, LocalDate.of(2025, 1, 18), "test pos");
 
         int actual = controller.getAllUserDto().size();
         int expected = 4;

@@ -9,17 +9,31 @@ import org.hibernate.Transaction;
 
 import java.util.List;
 
+/**
+ * The {@code CopyService} class provides business logic for managing book copies in the library system.
+ */
 public class CopyService {
     private final SessionFactory sessionFactory;
     private final CopyDao copyDao;
     private Transaction transaction;
     private static CopyService instance;
 
+    /**
+     * Creates a new instance of {@code CopyService} with the specified configuration file.
+     *
+     * @param conf the path to the Hibernate configuration file
+     */
     private CopyService(String conf) {
         sessionFactory = SessionFactoryProvider.getSessionFactory(conf);
         copyDao = new CopyDao(sessionFactory);
     }
 
+    /**
+     * Retrieves the singleton instance of {@code CopyService}.
+     *
+     * @param config the path to the Hibernate configuration file
+     * @return the singleton instance of {@code CopyService}
+     */
     public static CopyService getInstance(String config) {
         if (instance == null) {
             instance = new CopyService(config);
@@ -27,6 +41,11 @@ public class CopyService {
         return instance;
     }
 
+    /**
+     * Creates a new book copy.
+     *
+     * @param copy the {@code Copy} entity representing the book copy
+     */
     public void createCopy(Copy copy) {
         try {
             Session currentSession = sessionFactory.getCurrentSession();
@@ -39,6 +58,13 @@ public class CopyService {
         }
     }
 
+    /**
+     * Retrieves a copy record by its ID.
+     *
+     * @param id the ID of the copy record
+     * @return the {@code Copy} containing the copy details
+     * @throws RuntimeException if copy record does not exist in database
+     */
     public Copy getCopyById(Integer id) {
         try {
             Session currentSession = sessionFactory.getCurrentSession();
@@ -55,6 +81,13 @@ public class CopyService {
         }
     }
 
+    /**
+     * Retrieves a copy record by its number.
+     *
+     * @param copyNumber the number of the copy record
+     * @return the {@code Copy} containing the copy details
+     * @throws RuntimeException if copy record does not exist in database
+     */
     public Copy getCopyByCopyNumber(Integer copyNumber) {
         try {
             Session currentSession = sessionFactory.getCurrentSession();
@@ -71,6 +104,11 @@ public class CopyService {
         }
     }
 
+    /**
+     * Updates a copy record.
+     *
+     * @param copy the {@code Copy} containing copy details
+     */
     public void updateCopy(Copy copy) {
         try {
             Session currentSession = sessionFactory.getCurrentSession();
@@ -83,6 +121,11 @@ public class CopyService {
         }
     }
 
+    /**
+     * Retrieves all book copies.
+     *
+     * @return a list of {@code Copy} entities
+     */
     public List<Copy> getAll() {
         try {
             Session currentSession = sessionFactory.getCurrentSession();
@@ -96,6 +139,11 @@ public class CopyService {
         }
     }
 
+    /**
+     * Deletes a book copy by its ID.
+     *
+     * @param id the ID of the book copy to delete
+     */
     public void deleteCopyById(Integer id) {
         try {
             Session currentSession = sessionFactory.getCurrentSession();

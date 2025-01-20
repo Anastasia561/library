@@ -3,6 +3,8 @@ package library.view.frame.creational;
 import library.controller.Controller;
 import library.dto.UserForLibrarianDto;
 import library.entity.Librarian;
+import library.view.frame.main.LibrarianFrame;
+import library.view.table_model.UserTableModel;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -19,14 +21,19 @@ public class UserCreationFrame extends JFrame {
     private final Boolean isLibrarian;
     private final Boolean isModification;
     private final String email;
+    private final UserTableModel tableModel;
+    private final LibrarianFrame librarianFrame;
     private UserForLibrarianDto dto = null;
 
     public UserCreationFrame(Controller controller, Boolean isLibrarian,
-                             Boolean isModification, String email) {
+                             Boolean isModification, String email,
+                             UserTableModel tableModel, LibrarianFrame librarianFrame) {
         this.controller = controller;
         this.isLibrarian = isLibrarian;
         this.isModification = isModification;
         this.email = email;
+        this.tableModel = tableModel;
+        this.librarianFrame = librarianFrame;
         create();
     }
 
@@ -148,6 +155,9 @@ public class UserCreationFrame extends JFrame {
                             controller.createUser(dto);
                         }
                     }
+
+                    tableModel.addUsers(controller.getAllUserDto());
+                    librarianFrame.updateRowButtons();
 
                     nameField.setText("");
                     emailField.setText("");

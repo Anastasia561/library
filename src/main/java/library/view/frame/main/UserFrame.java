@@ -13,6 +13,7 @@ import java.util.List;
 public class UserFrame extends JFrame {
     private JList<String> optionList;
     private final JPanel rightPanel;
+    private final CardLayout cardLayout;
     private final Controller controller;
     private final String userEmail;
 
@@ -28,11 +29,17 @@ public class UserFrame extends JFrame {
         setResizable(false);
         setLayout(new BorderLayout());
 
-        rightPanel = new JPanel();
-        rightPanel.setVisible(false);
+        cardLayout = new CardLayout();
+        rightPanel = new JPanel(cardLayout);
+
         JPanel leftPanel = createLeftPanel();
         add(leftPanel, BorderLayout.WEST);
         add(rightPanel, BorderLayout.EAST);
+
+        rightPanel.add(new JPanel(), "EMPTY");
+        rightPanel.add(createBookTable(controller.getAvailableBookForUserDto()), "AVAILABLE_BOOKS");
+        rightPanel.add(createBookTable(controller.getAllBookForUserDto()), "ALL_BOOKS");
+        rightPanel.add(createBorrowingsTable(), "BORROWINGS");
 
         setLocationRelativeTo(null);
         setVisible(true);
@@ -71,26 +78,14 @@ public class UserFrame extends JFrame {
         showButton.addActionListener(e -> {
             String selectedOption = optionList.getSelectedValue();
             if (selectedOption != null) {
-
-                if (!rightPanel.isVisible()) {
-                    rightPanel.setVisible(true);
+                switch (selectedOption) {
+                    case "Available books" -> cardLayout.show(rightPanel, "AVAILABLE_BOOKS");
+                    case "All books" -> cardLayout.show(rightPanel, "ALL_BOOKS");
+                    case "Borrowing history" -> cardLayout.show(rightPanel, "BORROWINGS");
+                    default -> cardLayout.show(rightPanel, "EMPTY");
                 }
-
-                JScrollPane pane;
-
-                if (selectedOption.equals("Available books")) {
-                    pane = createBookTable(controller.getAvailableBookForUserDto());
-                } else if (selectedOption.equals("All books")) {
-                    pane = createBookTable(controller.getAllBookForUserDto());
-                } else {
-                    pane = createBorrowingsTable();
-                }
-                rightPanel.removeAll();
-                rightPanel.add(pane);
-                revalidate();
-                repaint();
             } else {
-                JOptionPane.showMessageDialog(this, "Please select option first");
+                JOptionPane.showMessageDialog(this, "Please select an option first");
             }
         });
         return showButton;

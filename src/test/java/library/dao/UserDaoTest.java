@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class UserDaoTest extends AbstractBaseDaoTest {
+public class UserDaoTest extends AbstractBaseTest {
     @Test
     void saveTest() {
         User user = User.builder()

@@ -1,5 +1,6 @@
 package library.service;
 
+import library.dao.AbstractBaseTest;
 import library.dto.UserForLibrarianDto;
 import library.entity.Librarian;
 import library.entity.User;
@@ -12,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class LibrarianServiceTest extends AbstractBaseServiceTest {
+public class LibrarianServiceTest extends AbstractBaseTest {
     private final LibrarianService librarianService = LibrarianService.getInstance("h2.cfg.xml");
     private final UserService userService = UserService.getInstance("h2.cfg.xml");
 

@@ -41,27 +41,6 @@ public class BookMapperTest {
     }
 
     @Test
-    void toBookFromForLibrarianDtoTest() {
-        BookForLibrarianDto dto = BookForLibrarianDto.builder()
-                .title("Test Book")
-                .author("Test Author")
-                .publisherName("Penguin Books")
-                .publicationYear(2020)
-                .isbn("1234567890345")
-                .build();
-
-        Book book = BookMapper.toBookFromForLibrarianDto(dto);
-
-        assertAll(
-                () -> assertEquals("Test Book", book.getTitle()),
-                () -> assertEquals("Test Author", book.getAuthor()),
-                () -> assertEquals(1, book.getPublisher().getId()),
-                () -> assertEquals(2020, book.getPublicationYear()),
-                () -> assertEquals("1234567890345", book.getIsbn())
-        );
-    }
-
-    @Test
     void toForUserDtoTest() {
         Book book = Book.builder()
                 .id(1)

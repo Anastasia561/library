@@ -2,6 +2,8 @@ package library.view.frame.creational;
 
 import library.controller.Controller;
 import library.dto.BorrowingDto;
+import library.view.frame.main.LibrarianFrame;
+import library.view.table_model.BorrowingForLibrarianTableModel;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -17,12 +19,18 @@ public class BorrowingCreationFrame extends JFrame {
     private final Controller controller;
     private final Boolean isModification;
     private final Integer id;
+    private final BorrowingForLibrarianTableModel tableModel;
+    private final LibrarianFrame librarianFrame;
     private BorrowingDto dto = null;
 
-    public BorrowingCreationFrame(Controller controller, Boolean isModification, Integer id) {
+    public BorrowingCreationFrame(Controller controller, Boolean isModification, Integer id,
+                                  BorrowingForLibrarianTableModel tableModel,
+                                  LibrarianFrame librarianFrame) {
         this.controller = controller;
         this.isModification = isModification;
         this.id = id;
+        this.tableModel = tableModel;
+        this.librarianFrame = librarianFrame;
         create();
     }
 
@@ -147,6 +155,9 @@ public class BorrowingCreationFrame extends JFrame {
                     } else {
                         controller.createBorrowing(dto);
                     }
+
+                    tableModel.addBorrowings(controller.getAllBorrowingDto());
+                    librarianFrame.updateRowButtons();
 
                     userNameField.setText("");
                     userEmailField.setText("");

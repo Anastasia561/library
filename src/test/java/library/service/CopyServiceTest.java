@@ -1,5 +1,6 @@
 package library.service;
 
+import library.dao.AbstractBaseTest;
 import library.entity.Book;
 import library.entity.Copy;
 import library.mapper.BookMapper;
@@ -9,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class CopyServiceTest extends AbstractBaseServiceTest {
+public class CopyServiceTest extends AbstractBaseTest {
     private final CopyService copyService = CopyService.getInstance("h2.cfg.xml");
     private final BookService bookService = BookService.getInstance("h2.cfg.xml");
 
@@ -95,7 +96,7 @@ public class CopyServiceTest extends AbstractBaseServiceTest {
 
         Copy copy = Copy.builder()
                 .book(book)
-                .copyNumber(20)
+                .copyNumber(21)
                 .status("Available")
                 .build();
         copyService.createCopy(copy);

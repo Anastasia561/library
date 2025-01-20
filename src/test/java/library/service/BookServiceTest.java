@@ -1,5 +1,6 @@
 package library.service;
 
+import library.dao.AbstractBaseTest;
 import library.dto.BookForLibrarianDto;
 import library.dto.BookForUserDto;
 import org.junit.jupiter.api.Test;
@@ -8,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class BookServiceTest extends AbstractBaseServiceTest {
+public class BookServiceTest extends AbstractBaseTest {
     private final BookService bookService = BookService.getInstance("h2.cfg.xml");
 
     @Test

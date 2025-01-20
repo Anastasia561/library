@@ -1,6 +1,6 @@
 package library.mapper;
 
-import library.dao.AbstractBaseDaoTest;
+import library.dao.AbstractBaseTest;
 import library.dto.UserForLibrarianDto;
 import library.dto.UserInfoDto;
 import library.entity.Borrowing;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class UserMapperTest extends AbstractBaseDaoTest {
+public class UserMapperTest extends AbstractBaseTest {
     @Test
     void toUserInfoDtoTest() {
         User user = User.builder()

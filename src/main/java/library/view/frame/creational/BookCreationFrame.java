@@ -2,6 +2,8 @@ package library.view.frame.creational;
 
 import library.controller.Controller;
 import library.dto.BookForLibrarianDto;
+import library.view.frame.main.LibrarianFrame;
+import library.view.table_model.BookForLibrarianTableModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,12 +12,18 @@ public class BookCreationFrame extends JFrame {
     private final Controller controller;
     private final Boolean isModification;
     private final String isbn;
+    private final BookForLibrarianTableModel tableModel;
+    private final LibrarianFrame librarianFrame;
     private BookForLibrarianDto dto = null;
 
-    public BookCreationFrame(Controller controller, Boolean isModification, String isbn) {
+    public BookCreationFrame(Controller controller, Boolean isModification, String isbn,
+                             BookForLibrarianTableModel tableModel,
+                             LibrarianFrame librarianFrame) {
         this.controller = controller;
         this.isModification = isModification;
         this.isbn = isbn;
+        this.tableModel = tableModel;
+        this.librarianFrame = librarianFrame;
         create();
     }
 
@@ -108,6 +116,9 @@ public class BookCreationFrame extends JFrame {
                     } else {
                         controller.createBook(dto);
                     }
+
+                    tableModel.addBooks(controller.getAllBookDto());
+                    librarianFrame.updateRowButtons();
 
                     titleField.setText("");
                     authorField.setText("");

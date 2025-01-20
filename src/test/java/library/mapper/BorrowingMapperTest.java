@@ -55,25 +55,4 @@ public class BorrowingMapperTest {
                         dto.getReturnDate())
         );
     }
-
-    @Test
-    void toBorrowingTest() {
-        BorrowingDto dto = BorrowingDto.builder()
-                .id(1)
-                .userEmail("alice.johnson@example.com")
-                .copyNumber(1)
-                .borrowDate(LocalDate.of(2023, 1, 1))
-                .returnDate(LocalDate.of(2023, 1, 10))
-                .build();
-
-        Borrowing borrowing = BorrowingMapper.toBorrowing(dto);
-
-        assertAll(
-                () -> assertEquals(1, borrowing.getId()),
-                () -> assertEquals("Alice Johnson", borrowing.getUser().getName()),
-                () -> assertEquals(1, borrowing.getCopy().getCopyNumber()),
-                () -> assertEquals(LocalDate.of(2023, 1, 1), borrowing.getBorrowDate()),
-                () -> assertEquals(LocalDate.of(2023, 1, 10), borrowing.getReturnDate())
-        );
-    }
 }

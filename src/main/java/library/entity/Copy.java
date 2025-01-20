@@ -20,6 +20,26 @@ import lombok.ToString;
 
 import java.util.List;
 
+/**
+ * Entity class representing a copy of a book in the library system.
+ * <p>
+ * This class is annotated with JPA annotations to map it to the "copy" table in the database.
+ * It represents an individual physical copy of a book, identified by a unique copy number and status.
+ * <p>
+ * Annotations:
+ * - {@code @Entity}: Indicates that this class is a JPA entity.
+ * - {@code @Table}: Maps this entity to the "copy" table in the database.
+ * - Lombok annotations ({@code @Getter}, {@code @Setter}, {@code @ToString}, {@code @Builder}, etc.) are used to
+ * automatically generate boilerplate code such as getters, setters, constructors, and toString methods.
+ * <p>
+ * Relationships:
+ * - Many-to-One with {@code Book}: Each copy is associated with a single book.
+ * - One-to-Many with {@code Borrowing}: Each copy can have multiple borrowings over time.
+ * <p>
+ * Lifecycle Methods:
+ * - {@code checkForConnections()}: A pre-remove lifecycle method that prevents deletion of a copy
+ * if it has associated borrowings.
+ */
 @Getter
 @Setter
 @ToString

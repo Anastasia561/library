@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class LibrarianDaoTest extends AbstractBaseDaoTest {
+public class LibrarianDaoTest extends AbstractBaseTest {
     @Test
     void saveTest() {
         User user = User.builder()

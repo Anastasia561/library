@@ -22,6 +22,28 @@ import lombok.ToString;
 
 import java.util.List;
 
+/**
+ * Entity class representing a user in the library system.
+ * <p>
+ * This class is annotated with JPA annotations to map it to the "user" table in the database.
+ * It represents a user with attributes such as name, email, phone number, and address. A user may have
+ * multiple borrowings and optionally be associated with a librarian record.
+ * <p>
+ * Annotations:
+ * - {@code @Entity}: Indicates that this class is a JPA entity.
+ * - {@code @Table}: Maps this entity to the "user" table in the database. The table name is escaped
+ * with double quotes to avoid conflicts with reserved keywords in SQL.
+ * - Lombok annotations ({@code @Getter}, {@code @Setter}, {@code @ToString}, {@code @Builder}, etc.) are used to
+ * automatically generate boilerplate code such as getters, setters, constructors, and toString methods.
+ * <p>
+ * Relationships:
+ * - One-to-Many with {@code Borrowing}: Each user can have multiple borrowings.
+ * - One-to-One with {@code Librarian}: A user can optionally have a librarian record.
+ * <p>
+ * Lifecycle Methods:
+ * - {@code checkForConnections()}: A pre-remove lifecycle method that prevents deletion of a user
+ * if they have associated borrowings.
+ */
 @Getter
 @Setter
 @ToString

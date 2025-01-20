@@ -1,5 +1,6 @@
 package library.service;
 
+import library.dao.AbstractBaseTest;
 import library.entity.Publisher;
 import org.junit.jupiter.api.Test;
 
@@ -7,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class PublisherServiceTest extends AbstractBaseServiceTest {
+public class PublisherServiceTest extends AbstractBaseTest {
     private final PublisherService publisherService = PublisherService.getInstance("h2.cfg.xml");
 
     @Test

@@ -1,5 +1,6 @@
 package library.service;
 
+import library.dao.AbstractBaseTest;
 import library.dto.UserForLibrarianDto;
 import library.dto.UserInfoDto;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class UserServiceTest extends AbstractBaseServiceTest {
+public class UserServiceTest extends AbstractBaseTest {
     private final UserService userService = UserService.getInstance("h2.cfg.xml");
 
     @Test

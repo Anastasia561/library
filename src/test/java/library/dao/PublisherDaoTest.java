@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class PublisherDaoTest extends AbstractBaseDaoTest {
+public class PublisherDaoTest extends AbstractBaseTest {
     @Test
     void saveTest() {
         Publisher publisher = Publisher.builder()
